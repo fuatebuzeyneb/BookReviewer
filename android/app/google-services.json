@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "951679074629",
+    "project_id": "bitirme-34bb3",
+    "storage_bucket": "bitirme-34bb3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:951679074629:android:7046fbc9bb4ef447543e2c",
+        "android_client_info": {
+          "package_name": "com.example.bitirme1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "951679074629-5sog6un1f73ro9sgectn5f31se6b82ic.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_LuRiCmjk9KwHQwN26Z6JSuys9rVeWlk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "951679074629-5sog6un1f73ro9sgectn5f31se6b82ic.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "951679074629-6hvuhuv2vqsrnofvah0lllvbq3iqj132.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.bookReviewer"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:951679074629:android:9cd371b09f27b866543e2c",
+        "android_client_info": {
+          "package_name": "fu.fuat.bookreviewer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "951679074629-5sog6un1f73ro9sgectn5f31se6b82ic.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_LuRiCmjk9KwHQwN26Z6JSuys9rVeWlk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "951679074629-5sog6un1f73ro9sgectn5f31se6b82ic.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "951679074629-6hvuhuv2vqsrnofvah0lllvbq3iqj132.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.bookReviewer"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
