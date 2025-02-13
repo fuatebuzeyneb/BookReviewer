@@ -26,7 +26,6 @@ class TextWidget extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
-          fontFamily: 'Tajawal',
           color: color,
           fontSize: fontSize,
           fontWeight: fontWeight,

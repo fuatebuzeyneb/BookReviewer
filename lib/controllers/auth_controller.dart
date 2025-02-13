@@ -50,7 +50,7 @@ class AuthController extends GetxController {
       if (user != null) {
         printUserToken();
 
-        Get.offNamed(Routes.home);
+        Get.offNamed(Routes.homeView);
       } else {}
     } finally {
       isLoading.value = false;

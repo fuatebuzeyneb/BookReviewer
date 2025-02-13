@@ -1,5 +1,6 @@
 import 'package:book_reviewer/themes/extensions.dart';
 import 'package:book_reviewer/views/widgets/text_widget.dart';
+
 import 'package:flutter/material.dart';
 
 class ButtonWidget extends StatelessWidget {
@@ -50,10 +51,11 @@ class ButtonWidget extends StatelessWidget {
                 ? []
                 : [
                     BoxShadow(
-                      color: Colors.black.withOpacity(boxShadowOpacity!),
-                      spreadRadius: 1,
-                      blurRadius: 1,
-                      offset: const Offset(0, 2),
+                      color: Colors.black
+                          .withOpacity(boxShadowOpacity!), // لون الظل
+                      spreadRadius: 1, // مدى انتشار الظل
+                      blurRadius: 1, // مقدار الضبابية
+                      offset: const Offset(0, 2), // إزاحة الظل (x, y)
                     ),
                   ],
             borderRadius: BorderRadius.circular(borderRadius),
@@ -63,6 +65,7 @@ class ButtonWidget extends StatelessWidget {
           child: child ??
               Center(
                 child: TextWidget(
+                  //   fontFamily: 'Tajawal',
                   text: text!,
                   color: colorText!,
                   fontSize: fontSize!,

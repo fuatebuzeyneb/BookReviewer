@@ -1,9 +1,9 @@
 import 'package:book_reviewer/controllers/auth_controller.dart';
-import 'package:book_reviewer/home_view.dart';
+import 'package:book_reviewer/views/screens/main_screens/home_view.dart';
 import 'package:book_reviewer/routes/app_pages.dart';
 import 'package:book_reviewer/routes/routes.dart';
-import 'package:book_reviewer/views/screens/sign_in_view.dart';
-import 'package:book_reviewer/views/screens/sign_up_view.dart';
+import 'package:book_reviewer/views/screens/auth_screens/sign_in_view.dart';
+import 'package:book_reviewer/views/screens/auth_screens/sign_up_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: Routes.home,
+      initialRoute: Routes.signin,
       getPages: AppPages.pages,
     );
   }

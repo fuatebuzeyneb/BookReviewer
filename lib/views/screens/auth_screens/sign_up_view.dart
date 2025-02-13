@@ -7,14 +7,13 @@ import 'package:book_reviewer/views/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import '../../controllers/auth_controller.dart';
+import '../../../controllers/auth_controller.dart';
 
 class SignupView extends StatelessWidget {
   final AuthController authController = Get.find<AuthController>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController fullNameController = TextEditingController();
-  final GlobalKey<FormState> formKeyForSignUp = GlobalKey();
 
   SignupView({super.key});
 
