@@ -1,4 +1,5 @@
 import 'package:book_reviewer/models/user_model.dart';
+import 'package:book_reviewer/routes/routes.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../services/auth_service.dart';
@@ -8,19 +9,17 @@ class AuthController extends GetxController {
   final AuthService _authService = AuthService();
 
   Rx<User?> firebaseUser = Rx<User?>(null);
-  Rx<UserModel?> userModel = Rx<UserModel?>(null); // بيانات المستخدم
+  Rx<UserModel?> userModel = Rx<UserModel?>(null);
+  RxBool isLoading = false.obs; // حالة التحميل
 
   @override
   void onReady() {
     super.onReady();
     firebaseUser.bindStream(FirebaseAuth.instance.authStateChanges());
 
-    firebaseUser.listen((User? user) async {
-      if (user != null) {
-        userModel.value = await _authService.getUserData(user.uid);
-      } else {
-        userModel.value = null;
-      }
+    ever(firebaseUser, (User? user) async {
+      userModel.value =
+          user != null ? await _authService.getUserData(user.uid) : null;
     });
   }
 
@@ -34,26 +33,33 @@ class AuthController extends GetxController {
   }
 
   Future<void> signUp(String email, String password, String fullName) async {
-    User? user = await _authService.signUp(email, password, fullName);
-    if (user != null) {
-      // Get.snackbar("Success", "Account created successfully!");
-    } else {
-      // Get.snackbar("Error", "Failed to sign up");
+    try {
+      isLoading.value = true; // بدء التحميل
+      User? user = await _authService.signUp(email, password, fullName);
+      if (user != null) {
+      } else {}
+    } finally {
+      isLoading.value = false;
     }
   }
 
   Future<void> signIn(String email, String password) async {
-    User? user = await _authService.signIn(email, password);
-    if (user != null) {
-      // Get.snackbar("Success", "Logged in successfully!");
-      printUserToken(); // جلب التوكن بعد تسجيل الدخول
-    } else {
-      //    Get.snackbar("Error", "Failed to sign in");
+    try {
+      isLoading.value = true;
+      User? user = await _authService.signIn(email, password);
+      if (user != null) {
+        printUserToken();
+
+        Get.offNamed(Routes.home);
+      } else {}
+    } finally {
+      isLoading.value = false;
     }
   }
 
   Future<void> signOut() async {
     await _authService.signOut();
-    Get.snackbar("Success", "Logged out successfully!");
+
+    Get.offAllNamed("/login");
   }
 }

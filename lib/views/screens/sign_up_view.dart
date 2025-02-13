@@ -1,5 +1,6 @@
+import 'package:book_reviewer/routes/routes.dart';
 import 'package:book_reviewer/themes/app_colors.dart';
-import 'package:book_reviewer/themes/loading_widget.dart';
+import 'package:book_reviewer/views/widgets/loading_widget.dart';
 import 'package:book_reviewer/views/widgets/button_widget.dart';
 import 'package:book_reviewer/views/widgets/text_field_widget.dart';
 import 'package:book_reviewer/views/widgets/text_widget.dart';
@@ -8,22 +9,20 @@ import 'package:get/get.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../../controllers/auth_controller.dart';
 
-class SignUpView extends StatelessWidget {
+class SignupView extends StatelessWidget {
   final AuthController authController = Get.find<AuthController>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController fullNameController = TextEditingController();
   final GlobalKey<FormState> formKeyForSignUp = GlobalKey();
 
-  SignUpView({super.key});
+  SignupView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
       inAsyncCall: false,
-      progressIndicator: const LoadingWidget(
-        showImageLoading: false,
-      ),
+      progressIndicator: const LoadingWidget(),
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Container(
@@ -192,19 +191,24 @@ class SignUpView extends StatelessWidget {
                           ],
                         ),
                         SizedBox(height: context.height * 0.02),
-                        const Row(
-                          children: [
-                            Text(
-                              'Sign In',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.underline,
-                                decorationColor: Colors.blue,
-                                decorationThickness: 2,
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed(Routes.signin);
+                          },
+                          child: const Row(
+                            children: [
+                              Text(
+                                'Sign In',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: Colors.blue,
+                                  decorationThickness: 2,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         )
                       ],
                     ),
