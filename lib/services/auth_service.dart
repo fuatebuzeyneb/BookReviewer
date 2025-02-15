@@ -1,22 +1,64 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
+
 import '../models/user_model.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
+  final box = GetStorage();
 
-  Future<User?> signUp(String email, String password, String fullName) async {
+  // رفع الصورة إلى Firebase Storage
+  Future<String?> uploadImage(File imageFile, String userId) async {
+    try {
+      Reference storageReference = _storage.ref().child('user_images/$userId');
+      UploadTask uploadTask = storageReference.putFile(imageFile);
+      TaskSnapshot snapshot = await uploadTask;
+      String downloadUrl = await snapshot.ref.getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      print("Error uploading image: $e");
+      return null;
+    }
+  }
+
+  // التسجيل وحفظ بيانات المستخدم مع رفع الصورة
+  Future<User?> signUp(
+      UserModel userModel, String password, File? imageFile) async {
     try {
       UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
-        email: email,
+        email: userModel.email,
         password: password,
       );
 
       User? user = userCredential.user;
       if (user != null) {
-        await saveUserToFirestore(user, fullName);
+        String? profilePicture;
+        // إذا كانت الصورة موجودة، رفعها إلى Firebase Storage
+        if (imageFile != null) {
+          profilePicture = await uploadImage(
+              imageFile, user.uid); // رفع الصورة والحصول على رابط الصورة
+        }
+
+        // إنشاء كائن UserModel مع صورة الملف إذا كانت موجودة
+        UserModel newUser = UserModel(
+          uid: user.uid,
+          fullName: userModel.fullName,
+          email: userModel.email,
+          profilePicture: profilePicture,
+          createdAt: DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()),
+        );
+
+        // حفظ بيانات المستخدم في Firestore
+        await saveUserToFirestore(newUser);
+        await saveUserData(newUser);
       }
       return user;
     } catch (e) {
@@ -25,16 +67,14 @@ class AuthService {
     }
   }
 
-  Future<void> saveUserToFirestore(User user, String fullName) async {
-    final userModel = UserModel(
-      uid: user.uid,
-      email: user.email!,
-      fullName: fullName,
-      profilePicture: user.photoURL ?? "",
-      createdAt: DateTime.now(),
-    );
-
-    await _firestore.collection('users').doc(user.uid).set(userModel.toJson());
+  // حفظ بيانات المستخدم في Firestore
+  Future<void> saveUserToFirestore(UserModel user) async {
+    try {
+      await _firestore.collection('users').doc(user.uid).set(user.toJson());
+      print("تمت إضافة المستخدم إلى Firestore بنجاح");
+    } catch (e) {
+      print("حدث خطأ أثناء حفظ المستخدم في Firestore: $e");
+    }
   }
 
   User? getCurrentUser() {
@@ -47,6 +87,8 @@ class AuthService {
         email: email,
         password: password,
       );
+      UserModel? userModel = await getUserData(userCredential.user!.uid);
+      await saveUserData(userModel!);
 
       return userCredential.user;
     } catch (e) {
@@ -70,16 +112,20 @@ class AuthService {
   }
 
   Future<UserModel?> getUserData(String uid) async {
-    try {
-      DocumentSnapshot userDoc =
-          await FirebaseFirestore.instance.collection('users').doc(uid).get();
-
-      if (userDoc.exists) {
-        return UserModel.fromJson(userDoc.data() as Map<String, dynamic>);
-      }
-    } catch (e) {
-      print("Error fetching user data: $e");
+    // تحقق أولًا من البيانات المخزنة محليًا
+    final localData = box.read('userData');
+    if (localData != null) {
+      return UserModel.fromJson(localData);
     }
-    return null;
+    return null; // لا حاجة لجلب البيانات من Firebase إذا كانت موجودة في التخزين المحلي
+  }
+
+  Future<void> saveUserData(UserModel user) async {
+    await box.write('userData', user.toJson());
+    // تخزين بيانات المستخدم محليًا
+  }
+
+  void clearUserData() {
+    box.remove('userData'); // حذف بيانات المستخدم عند تسجيل الخروج
   }
 }

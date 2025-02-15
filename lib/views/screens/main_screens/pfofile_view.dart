@@ -1,14 +1,20 @@
+import 'package:book_reviewer/controllers/auth_controller.dart';
 import 'package:book_reviewer/themes/app_colors.dart';
 import 'package:book_reviewer/themes/extensions.dart';
 import 'package:book_reviewer/views/widgets/button_widget.dart';
 import 'package:book_reviewer/views/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/get_core.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:intl/intl.dart';
 
 class ProfileView extends StatelessWidget {
-  const ProfileView({super.key});
+  final AuthController _authController = Get.find<AuthController>();
+  ProfileView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    print("UserModel after loading: ${_authController.userModel.value!.email}");
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
@@ -32,11 +38,11 @@ class ProfileView extends StatelessWidget {
               CircleAvatar(
                 backgroundColor: AppColors.yellow,
                 radius: 55, // نصف قطر الدائرة
-                child: const CircleAvatar(
-                  radius: 50, // نصف قطر الدائرة
-                  backgroundImage:
-                      AssetImage('assets/images/test_book.jpg'), // رابط الصورة
-                ),
+                child: CircleAvatar(
+                    radius: 50, // نصف قطر الدائرة
+                    backgroundImage: NetworkImage(
+                      _authController.userModel.value!.profilePicture!,
+                    )),
               ),
               SizedBox(height: context.height * 0.02),
               Container(
@@ -49,19 +55,19 @@ class ProfileView extends StatelessWidget {
                     Radius.circular(8),
                   ),
                 ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(children: [
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          TextWidget(
+                          const TextWidget(
                             text: 'Name & Surname',
                             fontSize: 12,
                           ),
                           TextWidget(
-                            text: 'Toon Maryon',
+                            text: _authController.userModel.value!.fullName!,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -80,19 +86,50 @@ class ProfileView extends StatelessWidget {
                     Radius.circular(8),
                   ),
                 ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(children: [
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          TextWidget(
+                          const TextWidget(
                             text: 'Email',
                             fontSize: 12,
                           ),
                           TextWidget(
-                            text: 'Toon Maryon',
+                            text: _authController.userModel.value!.email,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ])
+                  ]),
+                ),
+              ),
+              SizedBox(height: context.height * 0.01),
+              Container(
+                padding: const EdgeInsets.all(6),
+                height: context.height * 0.07,
+                width: context.width * 0.9,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(8),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(children: [
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const TextWidget(
+                            text: 'Created At',
+                            fontSize: 12,
+                          ),
+                          TextWidget(
+                            text: _authController.userModel.value!.createdAt,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -102,7 +139,9 @@ class ProfileView extends StatelessWidget {
               ),
               SizedBox(height: context.height * 0.01),
               ButtonWidget(
-                onTap: () {},
+                onTap: () {
+                  _authController.signOut();
+                },
                 text: 'Logout',
                 height: 0.06,
                 width: 0.9,

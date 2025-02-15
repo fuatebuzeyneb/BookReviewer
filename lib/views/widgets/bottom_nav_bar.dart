@@ -31,7 +31,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
     final List<Widget> navPages = [
       const HomeView(),
       AddBookView(),
-      const ProfileView(),
+      ProfileView(),
     ];
 
     final List<BottomNavigationBarItem> navItems = [

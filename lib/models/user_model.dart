@@ -5,7 +5,7 @@ class UserModel {
   String email;
   String? fullName;
   String? profilePicture;
-  DateTime createdAt;
+  String createdAt;
 
   UserModel({
     required this.uid,
@@ -21,7 +21,7 @@ class UserModel {
       email: json['email'],
       fullName: json['fullName'],
       profilePicture: json['profilePicture'],
-      createdAt: (json['createdAt'] as Timestamp).toDate(),
+      createdAt: json['createdAt'],
     );
   }
 
