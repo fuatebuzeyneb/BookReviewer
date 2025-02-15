@@ -7,13 +7,39 @@ class CommentService {
       String bookId, CommentModel comment) async {
     try {
       final commentData = comment.toJson();
+
+      // إضافة التعليق إلى مجموعة "comments" داخل مستند الكتاب في Firebase
       await FirebaseFirestore.instance
+          .collection('books') // تأكد من أن هذا هو المسار الصحيح
+          .doc(bookId) // الكتاب الذي نريد إضافة التعليق إليه
+          .update({
+        'comments':
+            FieldValue.arrayUnion([commentData]), // إضافة التعليق إلى القائمة
+      });
+    } catch (e) {
+      print("Error adding comment to Firebase: $e");
+      rethrow; // إعادة الخطأ إذا فشل
+    }
+  }
+
+  static Future<CommentModel?> getUserComment(
+      String bookId, String userId) async {
+    try {
+      var querySnapshot = await FirebaseFirestore.instance
           .collection('books')
           .doc(bookId)
           .collection('comments')
-          .add(commentData);
+          .where('userId', isEqualTo: userId)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        return CommentModel.fromJson(querySnapshot.docs.first.data());
+      }
+      return null;
     } catch (e) {
-      print("Error adding comment to Firebase: $e");
+      print("Error fetching user comment: $e");
+      return null;
     }
   }
 

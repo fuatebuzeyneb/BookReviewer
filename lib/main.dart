@@ -1,5 +1,6 @@
 import 'package:book_reviewer/controllers/auth_controller.dart';
 import 'package:book_reviewer/controllers/book_controller.dart';
+import 'package:book_reviewer/controllers/comment_controller.dart';
 import 'package:book_reviewer/views/screens/main_screens/home_view.dart';
 import 'package:book_reviewer/routes/app_pages.dart';
 import 'package:book_reviewer/routes/routes.dart';
@@ -19,6 +20,8 @@ void main() async {
   );
   Get.put(AuthController());
   Get.put(BookController());
+  Get.put(CommentController());
+
 // التأكد من تحميل البيانات
 
   runApp(const MyApp());

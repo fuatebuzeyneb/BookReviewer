@@ -1,4 +1,5 @@
 import 'package:book_reviewer/controllers/book_controller.dart';
+import 'package:book_reviewer/controllers/comment_controller.dart';
 import 'package:book_reviewer/models/book_model.dart';
 import 'package:book_reviewer/routes/routes.dart';
 import 'package:book_reviewer/themes/app_colors.dart';
@@ -98,6 +99,9 @@ class bookCardWidget extends StatelessWidget {
                         Column(children: [
                           ButtonWidget(
                             onTap: () {
+                              Get.find<CommentController>().fetchUserComment(
+                                  bookId: books[index].id,
+                                  userId: books[index].userId);
                               Get.find<BookController>()
                                   .loadBookById(books[index].id);
                               Get.toNamed(Routes.bookDetailsView);

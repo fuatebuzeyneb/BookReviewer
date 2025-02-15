@@ -1,3 +1,6 @@
+import 'package:book_reviewer/controllers/book_controller.dart';
+import 'package:book_reviewer/controllers/comment_controller.dart';
+import 'package:book_reviewer/models/comment_model.dart';
 import 'package:book_reviewer/themes/app_colors.dart';
 import 'package:book_reviewer/themes/extensions.dart';
 import 'package:book_reviewer/views/widgets/bottom_sheet_widget.dart';
@@ -9,6 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/get_instance.dart';
 
 class AddCommentAndRateWidget extends StatefulWidget {
   const AddCommentAndRateWidget({super.key});
@@ -21,8 +26,10 @@ class AddCommentAndRateWidget extends StatefulWidget {
 class _AddCommentAndRateWidgetState extends State<AddCommentAndRateWidget> {
   final ValueNotifier<double> ratingNotifier = ValueNotifier(3.0);
   final FocusNode focusNode = FocusNode();
-  final TextEditingController commentController = TextEditingController();
+  final TextEditingController textCommentController = TextEditingController();
   double bottomSheetHeight = 0.4;
+  final CommentController commentController = Get.find<CommentController>();
+  final BookController bookController = Get.find<BookController>();
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +106,7 @@ class _AddCommentAndRateWidgetState extends State<AddCommentAndRateWidget> {
             ),
             const SizedBox(height: 12),
             TextFieldWidget(
-              controller: commentController,
+              controller: textCommentController,
               hint: 'Enter your comment',
               maxLines: 4,
               borderRadius: 12,
@@ -114,6 +121,17 @@ class _AddCommentAndRateWidgetState extends State<AddCommentAndRateWidget> {
                 paddingHorizontal: 12,
                 paddingVertical: 8,
                 onTap: () {
+                  commentController.addComment(
+                      bookId: bookController.selectedBook!.id,
+                      comment: CommentModel(
+                        commentText: textCommentController.text,
+                        userId: bookController.selectedBook!.userId,
+                        userName: bookController.selectedBook!.publisherName,
+                        ratingValue: ratingNotifier.value,
+                        userImageUrl:
+                            bookController.selectedBook!.publisherImageUrl,
+                        createdAt: DateTime.now(),
+                      ));
                   FocusScope.of(context).unfocus();
                 },
                 text: 'Send',

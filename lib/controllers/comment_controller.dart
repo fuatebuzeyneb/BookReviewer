@@ -3,15 +3,34 @@ import 'package:book_reviewer/services/comment_service.dart';
 import 'package:get/get.dart';
 
 class CommentController extends GetxController {
-  var comments = <CommentModel>[].obs;
+  RxList<CommentModel> comments = <CommentModel>[].obs;
+
+  Rxn<CommentModel> userComment = Rxn<CommentModel>();
 
   // إضافة تعليق
-  void addComment(String bookId, CommentModel comment) async {
+  void addComment(
+      {required String bookId, required CommentModel comment}) async {
     try {
-      await CommentService.addCommentToFirebase(bookId, comment);
-      comments.add(comment); // إضافة التعليق محلياً في المتغير
+      await CommentService.addCommentToFirebase(
+          bookId, comment); // إضافة التعليق إلى Firebase
+      comments
+          .add(comment); // إضافة التعليق إلى القائمة محلياً في الـ Controller
+      update(); // تحديث الـ UI إذا كنت تستخدم GetX
+      Get.snackbar('نجاح', 'تمت إضافة التعليق بنجاح!');
     } catch (e) {
       print("Error adding comment: $e");
+      Get.snackbar('خطأ', 'فشل إضافة التعليق: $e');
+    }
+  }
+
+  Future<void> fetchUserComment(
+      {required String bookId, required String userId}) async {
+    try {
+      CommentModel? comment =
+          await CommentService.getUserComment(bookId, userId);
+      userComment.value = comment; // تحديث الحالة
+    } catch (e) {
+      print("Error fetching user comment: $e");
     }
   }
 
