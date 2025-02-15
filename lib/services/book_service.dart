@@ -42,17 +42,18 @@ class BookService {
         if (imageUrl != null) {
           // نسخ الموديل مع إضافة timestamp واستخدام الرابط المرفوع للصورة
           BookModel newBook = BookModel(
-            id: bookId,
-            title: book.title,
-            author: book.author,
-            description: book.description,
-            coverImageUrl: imageUrl, // حفظ الرابط هنا
-            userId: user.uid,
-            rating: Random().nextDouble() * (5.0 - 2.0) + 2.0, // إضافة التقييم
-            comments: book.comments, // إضافة التعليقات (إن وجدت)
-            createdAt: DateTime.now(),
-            publisherName: book.publisherName,
-          );
+              id: bookId,
+              title: book.title,
+              author: book.author,
+              description: book.description,
+              coverImageUrl: imageUrl, // حفظ الرابط هنا
+              userId: user.uid,
+              rating:
+                  Random().nextDouble() * (5.0 - 2.0) + 2.0, // إضافة التقييم
+              comments: book.comments, // إضافة التعليقات (إن وجدت)
+              createdAt: DateTime.now(),
+              publisherName: book.publisherName,
+              publisherImageUrl: book.publisherImageUrl);
 
           // إضافة بيانات الكتاب إلى مجموعة "books" في Firestore
           await _firestore

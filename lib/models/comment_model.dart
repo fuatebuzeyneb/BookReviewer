@@ -4,6 +4,7 @@ class CommentModel {
   final String userImageUrl;
   final String commentText;
   final DateTime createdAt;
+  final double ratingValue;
 
   CommentModel({
     required this.userId,
@@ -11,6 +12,7 @@ class CommentModel {
     required this.userImageUrl,
     required this.commentText,
     required this.createdAt,
+    required this.ratingValue,
   });
 
   // تحويل بيانات التعليق إلى صيغة JSON لتخزينه في Firestore
@@ -21,6 +23,7 @@ class CommentModel {
       'userImageUrl': userImageUrl,
       'commentText': commentText,
       'createdAt': createdAt,
+      'ratingValue': ratingValue,
     };
   }
 
@@ -32,6 +35,7 @@ class CommentModel {
       userImageUrl: json['userImageUrl'],
       commentText: json['commentText'],
       createdAt: json['createdAt'].toDate(),
+      ratingValue: json['ratingValue'],
     );
   }
 }

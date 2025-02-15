@@ -6,24 +6,25 @@ class BookModel {
   final String author;
   final String description;
   final String coverImageUrl;
+  final String publisherImageUrl;
   final String userId;
   final double rating;
   final List<CommentModel> comments; // قائمة التعليقات
   final DateTime createdAt;
   final String publisherName;
 
-  BookModel({
-    required this.id,
-    required this.title,
-    required this.author,
-    required this.description,
-    required this.coverImageUrl,
-    required this.userId,
-    required this.rating, // التقييم الافتراضي 0
-    required this.comments, // قائمة التعليقات الافتراضية فارغة
-    required this.createdAt,
-    required this.publisherName,
-  });
+  BookModel(
+      {required this.id,
+      required this.title,
+      required this.author,
+      required this.description,
+      required this.coverImageUrl,
+      required this.userId,
+      required this.rating, // التقييم الافتراضي 0
+      required this.comments, // قائمة التعليقات الافتراضية فارغة
+      required this.createdAt,
+      required this.publisherName,
+      required this.publisherImageUrl});
 
   // تحويل بيانات الكتاب إلى صيغة JSON لتخزينها في Firestore
   Map<String, dynamic> toJson() {
@@ -37,7 +38,8 @@ class BookModel {
       'rating': rating,
       'comments': comments.map((comment) => comment.toJson()).toList(),
       'createdAt': createdAt,
-      'publisherName': publisherName
+      'publisherName': publisherName,
+      'publisherImageUrl': publisherImageUrl
     };
   }
 
@@ -57,6 +59,7 @@ class BookModel {
           [],
       createdAt: json['createdAt'].toDate(),
       publisherName: json['publisherName'],
+      publisherImageUrl: json['publisherImageUrl'],
     );
   }
 }

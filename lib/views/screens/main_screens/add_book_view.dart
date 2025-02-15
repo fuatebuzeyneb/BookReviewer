@@ -76,6 +76,10 @@ class AddBookView extends StatelessWidget {
                                 .userModel
                                 .value!
                                 .fullName!,
+                            publisherImageUrl: Get.find<AuthController>()
+                                .userModel
+                                .value!
+                                .profilePicture!,
                             coverImageUrl:
                                 bookController.pickedImage.value.toString());
                       },

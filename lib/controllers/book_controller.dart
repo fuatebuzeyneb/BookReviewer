@@ -73,13 +73,13 @@ class BookController extends GetxController {
   }
 
   // إضافة كتاب جديد
-  Future<void> addBook({
-    required String title,
-    required String author,
-    required String description,
-    required String coverImageUrl,
-    required String publisherName,
-  }) async {
+  Future<void> addBook(
+      {required String title,
+      required String author,
+      required String description,
+      required String coverImageUrl,
+      required String publisherName,
+      required String publisherImageUrl}) async {
     try {
       isLoading.value = true;
       BookModel book = BookModel(
@@ -92,7 +92,8 @@ class BookController extends GetxController {
           rating: 5.0, // تقييم افتراضي
           comments: [], // قائمة تعليقات فارغة
           createdAt: DateTime.now(),
-          publisherName: publisherName);
+          publisherName: publisherName,
+          publisherImageUrl: publisherImageUrl);
 
       await _bookService.addBook(book, pickedImage.value!);
       Get.snackbar('نجاح', 'تمت إضافة الكتاب بنجاح!');

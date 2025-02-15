@@ -1,6 +1,8 @@
 import 'package:book_reviewer/controllers/book_controller.dart';
 import 'package:book_reviewer/themes/app_colors.dart';
 import 'package:book_reviewer/themes/extensions.dart';
+import 'package:book_reviewer/views/widgets/add_comment_and_rate_widget.dart';
+import 'package:book_reviewer/views/widgets/button_widget.dart';
 import 'package:book_reviewer/views/widgets/loading_widget.dart';
 import 'package:book_reviewer/views/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ import 'package:get/get_core/get_core.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class BookDetailsView extends StatelessWidget {
@@ -20,6 +23,7 @@ class BookDetailsView extends StatelessWidget {
           inAsyncCall: bookController.isLoading.value,
           progressIndicator: const LoadingWidget(),
           child: Scaffold(
+            resizeToAvoidBottomInset: true,
             backgroundColor: Colors.grey[100],
             body: Column(
               children: [
@@ -42,7 +46,7 @@ class BookDetailsView extends StatelessWidget {
                           children: [
                             Image.network(
                               bookController.selectedBook!.coverImageUrl,
-                              height: context.height * 0.2,
+                              height: context.height * 0.17,
                               width: context.width * 0.2,
                             ),
                             SizedBox(width: context.width * 0.05),
@@ -104,7 +108,7 @@ class BookDetailsView extends StatelessWidget {
                                       TextWidget(
                                         text: bookController
                                             .selectedBook!.rating
-                                            .toString(),
+                                            .toStringAsFixed(1),
                                         fontSize: 14,
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
@@ -131,30 +135,34 @@ class BookDetailsView extends StatelessWidget {
                             Radius.circular(8),
                           ),
                         ),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Row(children: [
                             CircleAvatar(
-                              radius: 30, // نصف قطر الدائرة
-                              backgroundImage: AssetImage(
-                                  'assets/images/test_book.jpg'), // رابط الصورة
-                            ),
-                            SizedBox(width: 12),
+                                backgroundColor: Colors.white,
+                                radius: 30, // نصف قطر الدائرة
+                                backgroundImage: NetworkImage(bookController
+                                    .selectedBook!
+                                    .publisherImageUrl) // رابط الصورة
+                                ),
+                            const SizedBox(width: 12),
                             Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  TextWidget(
+                                  const TextWidget(
                                     text: 'Publish By',
                                     fontSize: 12,
                                   ),
                                   TextWidget(
-                                    text: 'Toon Maryon',
+                                    text: bookController
+                                        .selectedBook!.publisherName,
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
                                   TextWidget(
-                                    text: 'Publish Date: 23.12.2023',
+                                    text:
+                                        'Publish Date: ${DateFormat('dd.MM.yyyy').format(bookController.selectedBook!.createdAt)}',
                                     fontSize: 10,
                                   ),
                                 ])
@@ -189,13 +197,10 @@ class BookDetailsView extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 4),
-                      const TextWidget(
-                        text:
-                            ''''The Psychology of Money' is an essential read for anyone interested in being better with money. Fast-paced and engaging, this book will help you refine your thoughts towards money. You can finish this book in a week, unlike other books that are too lengthy.
-                        
-                        The most important emotions in relation to money are fear, guilt, shame, and envy. It's worth spending some effort to become aware of the emotions that are especially tied to money for you because, without awareness, they will tend to override rational thinking and drive your actions.''',
+                      TextWidget(
+                        text: bookController.selectedBook!.description,
                         fontSize: 12,
-                        textAlign: TextAlign.left,
+                        textAlign: TextAlign.justify,
                         maxLines: 12, // عرض النص على 12 سطر كحد أقصى
                         isHaveOverflow: true, // للتأكد من التفاف النص
                         color: Colors.black54,
@@ -210,6 +215,25 @@ class BookDetailsView extends StatelessWidget {
                           ),
                         ],
                       ),
+                      SizedBox(height: context.height * 0.01),
+                      ButtonWidget(
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled:
+                                true, // يسمح بالتحكم الكامل في الطول
+                            enableDrag: false,
+
+                            builder: (context) {
+                              return AddCommentAndRateWidget();
+                            },
+                          );
+                        },
+                        height: 0.05,
+                        width: 0.3,
+                        color: AppColors.greenAccent,
+                        text: 'Add Review',
+                      )
                     ],
                   ),
                 ),

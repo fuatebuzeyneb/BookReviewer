@@ -41,12 +41,12 @@ class _BottomNavBarState extends State<BottomNavBar> {
       ),
       const BottomNavigationBarItem(
         label: 'Add Book',
-        icon: Icon(Icons.favorite_border, size: 22),
+        icon: Icon(Icons.add_circle, size: 22),
       ),
       const BottomNavigationBarItem(
         label: 'Profile',
         icon: Icon(
-          Icons.add_circle,
+          Icons.person,
           size: 22,
         ),
       ),
