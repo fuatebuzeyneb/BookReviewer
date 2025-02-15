@@ -29,7 +29,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> navPages = [
-      const HomeView(),
+      HomeView(),
       AddBookView(),
       ProfileView(),
     ];

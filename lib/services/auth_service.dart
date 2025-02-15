@@ -58,7 +58,7 @@ class AuthService {
 
         // حفظ بيانات المستخدم في Firestore
         await saveUserToFirestore(newUser);
-        await saveUserData(newUser);
+        await getUserDataFromFirebase(userCredential.user!.uid);
       }
       return user;
     } catch (e) {
@@ -87,8 +87,7 @@ class AuthService {
         email: email,
         password: password,
       );
-      UserModel? userModel = await getUserData(userCredential.user!.uid);
-      await saveUserData(userModel!);
+      await getUserDataFromFirebase(userCredential.user!.uid);
 
       return userCredential.user;
     } catch (e) {
@@ -127,5 +126,17 @@ class AuthService {
 
   void clearUserData() {
     box.remove('userData'); // حذف بيانات المستخدم عند تسجيل الخروج
+  }
+
+  Future<void> getUserDataFromFirebase(String uid) async {
+    try {
+      DocumentSnapshot doc =
+          await _firestore.collection('users').doc(uid).get();
+      if (doc.exists) {
+        UserModel userModel =
+            UserModel.fromJson(doc.data() as Map<String, dynamic>);
+        saveUserData(userModel);
+      }
+    } catch (e) {}
   }
 }

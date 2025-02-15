@@ -10,6 +10,7 @@ class BookModel {
   final double rating;
   final List<CommentModel> comments; // قائمة التعليقات
   final DateTime createdAt;
+  final String publisherName;
 
   BookModel({
     required this.id,
@@ -21,6 +22,7 @@ class BookModel {
     required this.rating, // التقييم الافتراضي 0
     required this.comments, // قائمة التعليقات الافتراضية فارغة
     required this.createdAt,
+    required this.publisherName,
   });
 
   // تحويل بيانات الكتاب إلى صيغة JSON لتخزينها في Firestore
@@ -35,13 +37,14 @@ class BookModel {
       'rating': rating,
       'comments': comments.map((comment) => comment.toJson()).toList(),
       'createdAt': createdAt,
+      'publisherName': publisherName
     };
   }
 
   // إنشاء موديل من بيانات Firestore
-  factory BookModel.fromJson(Map<String, dynamic> json, String documentId) {
+  factory BookModel.fromJson(Map<String, dynamic> json) {
     return BookModel(
-      id: documentId,
+      id: json['id'],
       title: json['title'],
       author: json['author'],
       description: json['description'],
@@ -53,6 +56,7 @@ class BookModel {
               .toList() ??
           [],
       createdAt: json['createdAt'].toDate(),
+      publisherName: json['publisherName'],
     );
   }
 }

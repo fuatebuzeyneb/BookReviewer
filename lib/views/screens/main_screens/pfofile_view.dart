@@ -1,4 +1,6 @@
 import 'package:book_reviewer/controllers/auth_controller.dart';
+import 'package:book_reviewer/controllers/book_controller.dart';
+import 'package:book_reviewer/routes/routes.dart';
 import 'package:book_reviewer/themes/app_colors.dart';
 import 'package:book_reviewer/themes/extensions.dart';
 import 'package:book_reviewer/views/widgets/button_widget.dart';
@@ -6,6 +8,7 @@ import 'package:book_reviewer/views/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/get_core.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:intl/intl.dart';
 
 class ProfileView extends StatelessWidget {
@@ -135,6 +138,36 @@ class ProfileView extends StatelessWidget {
                           ),
                         ])
                   ]),
+                ),
+              ),
+              SizedBox(height: context.height * 0.01),
+              GestureDetector(
+                onTap: () {
+                  Get.toNamed(Routes.myBooksView);
+                  Get.find<BookController>()
+                      .loadUserBooks(_authController.userModel.value!.uid);
+                  // Get.find<BookController>().loadBooks();
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(6),
+                  height: context.height * 0.07,
+                  width: context.width * 0.9,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(8),
+                    ),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Center(
+                      child: TextWidget(
+                        text: 'My Books',
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 ),
               ),
               SizedBox(height: context.height * 0.01),

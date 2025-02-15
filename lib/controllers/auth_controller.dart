@@ -12,7 +12,7 @@ import '../services/auth_service.dart';
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
   final AuthService _authService = AuthService();
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   Rx<User?> firebaseUser = Rx<User?>(null);
   Rx<UserModel?> userModel = Rx<UserModel?>(null);
   RxBool isLoading = false.obs;
@@ -53,7 +53,7 @@ class AuthController extends GetxController {
       if (user != null) {
         print("User signed up successfully with image: ${user.uid}");
 
-        saveUserData(userModel);
+        // await getUserDataFromFirebase(user.uid);
         loadUserData();
         Get.offNamed(Routes.bottomNav);
       } else {
@@ -69,8 +69,8 @@ class AuthController extends GetxController {
       isLoading.value = true;
       User? user = await _authService.signIn(email, password);
       if (user != null) {
-        await getUserDataFromFirebase(
-            user.uid); // تحميل بيانات المستخدم من Firebase
+        // await getUserDataFromFirebase(
+        //     user.uid); // تحميل بيانات المستخدم من Firebase
         loadUserData(); // تحميل البيانات من التخزين المحلي بعد التحديث
         Get.offNamed(Routes.bottomNav);
       } else {
@@ -79,18 +79,6 @@ class AuthController extends GetxController {
     } finally {
       isLoading.value = false;
     }
-  }
-
-  Future<void> getUserDataFromFirebase(String uid) async {
-    try {
-      DocumentSnapshot doc =
-          await _firestore.collection('users').doc(uid).get();
-      if (doc.exists) {
-        UserModel userModel =
-            UserModel.fromJson(doc.data() as Map<String, dynamic>);
-        saveUserData(userModel);
-      }
-    } catch (e) {}
   }
 
   Future<void> saveUserData(UserModel user) async {

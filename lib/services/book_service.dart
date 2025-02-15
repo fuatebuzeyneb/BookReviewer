@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:book_reviewer/models/comment_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,6 +12,7 @@ class BookService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
+  DocumentSnapshot? lastDocument;
 
   Future<String?> uploadImage(File imageFile, String bookId) async {
     try {
@@ -46,9 +48,10 @@ class BookService {
             description: book.description,
             coverImageUrl: imageUrl, // حفظ الرابط هنا
             userId: user.uid,
-            rating: book.rating, // إضافة التقييم
+            rating: Random().nextDouble() * (5.0 - 2.0) + 2.0, // إضافة التقييم
             comments: book.comments, // إضافة التعليقات (إن وجدت)
             createdAt: DateTime.now(),
+            publisherName: book.publisherName,
           );
 
           // إضافة بيانات الكتاب إلى مجموعة "books" في Firestore
@@ -62,6 +65,82 @@ class BookService {
       }
     } catch (e) {
       print("حدث خطأ أثناء إضافة الكتاب: $e");
+    }
+  }
+
+  Future<List<BookModel>> fetchBooks({int limit = 2}) async {
+    try {
+      Query query = _firestore
+          .collection('books')
+          .orderBy('createdAt', descending: true) // 🔹 فرز من الأحدث إلى الأقدم
+          .limit(limit);
+
+      if (lastDocument != null) {
+        query = query.startAfterDocument(lastDocument!);
+      }
+
+      QuerySnapshot querySnapshot = await query.get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        lastDocument = querySnapshot.docs.last;
+      }
+
+      List<BookModel> books = querySnapshot.docs.map((doc) {
+        return BookModel.fromJson(doc.data() as Map<String, dynamic>);
+      }).toList();
+
+      return books;
+    } catch (e) {
+      print("❌ حدث خطأ أثناء جلب الكتب: $e");
+      return [];
+    }
+  }
+
+  Future<List<BookModel>> fetchTopRatedBooks({int limit = 6}) async {
+    try {
+      Query query = _firestore
+          .collection('books')
+          .orderBy('rating',
+              descending: true) // 🔹 ترتيب الكتب من الأعلى تقييمًا إلى الأقل
+          .limit(limit);
+
+      if (lastDocument != null) {
+        query = query.startAfterDocument(lastDocument!);
+      }
+
+      QuerySnapshot querySnapshot = await query.get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        lastDocument = querySnapshot.docs.last;
+      }
+
+      List<BookModel> books = querySnapshot.docs.map((doc) {
+        return BookModel.fromJson(doc.data() as Map<String, dynamic>);
+      }).toList();
+
+      return books;
+    } catch (e) {
+      print("❌ حدث خطأ أثناء جلب الكتب: $e");
+      return [];
+    }
+  }
+
+  // جلب كتب مستخدم معين
+  Future<List<BookModel>> fetchUserBooks(String userId) async {
+    try {
+      QuerySnapshot querySnapshot = await _firestore
+          .collection('books')
+          .where('userId', isEqualTo: userId)
+          .get();
+
+      List<BookModel> books = querySnapshot.docs.map((doc) {
+        return BookModel.fromJson(doc.data() as Map<String, dynamic>);
+      }).toList();
+
+      return books;
+    } catch (e) {
+      print("❌ حدث خطأ أثناء جلب كتب المستخدم: $e");
+      return [];
     }
   }
 

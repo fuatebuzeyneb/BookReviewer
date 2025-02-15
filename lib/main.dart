@@ -5,7 +5,7 @@ import 'package:book_reviewer/routes/app_pages.dart';
 import 'package:book_reviewer/routes/routes.dart';
 import 'package:book_reviewer/views/screens/auth_screens/sign_in_view.dart';
 import 'package:book_reviewer/views/screens/auth_screens/sign_up_view.dart';
-import 'package:book_reviewer/views/screens/splash_view.dart';
+import 'package:book_reviewer/views/screens/other_screens/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
