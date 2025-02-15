@@ -55,7 +55,11 @@ class BookService {
           );
 
           // إضافة بيانات الكتاب إلى مجموعة "books" في Firestore
-          await _firestore.collection('books').add(newBook.toJson());
+          await _firestore
+              .collection('books')
+              .doc(bookId)
+              .set(newBook.toJson());
+
           print("تمت إضافة الكتاب بنجاح");
         } else {
           print("لم يتم رفع الصورة، الكتاب لن يُضاف.");
@@ -68,7 +72,7 @@ class BookService {
     }
   }
 
-  Future<List<BookModel>> fetchBooks({int limit = 2}) async {
+  Future<List<BookModel>> fetchBooks({int limit = 8}) async {
     try {
       Query query = _firestore
           .collection('books')
@@ -85,11 +89,9 @@ class BookService {
         lastDocument = querySnapshot.docs.last;
       }
 
-      List<BookModel> books = querySnapshot.docs.map((doc) {
+      return querySnapshot.docs.map((doc) {
         return BookModel.fromJson(doc.data() as Map<String, dynamic>);
       }).toList();
-
-      return books;
     } catch (e) {
       print("❌ حدث خطأ أثناء جلب الكتب: $e");
       return [];
@@ -141,6 +143,24 @@ class BookService {
     } catch (e) {
       print("❌ حدث خطأ أثناء جلب كتب المستخدم: $e");
       return [];
+    }
+  }
+
+  Future<BookModel?> fetchBookById(String bookId) async {
+    try {
+      DocumentSnapshot docSnapshot =
+          await _firestore.collection('books').doc(bookId).get();
+
+      if (docSnapshot.exists) {
+        // إرجاع الكتاب باستخدام الـ ID
+        return BookModel.fromJson(docSnapshot.data() as Map<String, dynamic>);
+      } else {
+        print("❌ الكتاب غير موجود!");
+        return null;
+      }
+    } catch (e) {
+      print("❌ حدث خطأ أثناء جلب الكتاب: $e");
+      return null;
     }
   }
 

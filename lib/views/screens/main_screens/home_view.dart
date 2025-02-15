@@ -147,18 +147,21 @@ class HomeView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TextWidget(
+                const TextWidget(
                   text: 'Latest Books',
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
-                TextWidget(
-                  text: 'See All',
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
+                GestureDetector(
+                  onTap: () => Get.toNamed(Routes.seeAllView),
+                  child: const TextWidget(
+                    text: 'See All',
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
