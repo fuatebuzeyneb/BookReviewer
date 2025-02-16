@@ -23,7 +23,7 @@ class BookController extends GetxController {
     super.onInit();
     loadRatingBooks();
     getLatestBooks();
-    // loadBooks();
+    loadBooks();
     scrollController.addListener(onScroll);
   }
 
