@@ -5,6 +5,7 @@ import 'package:book_reviewer/routes/routes.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import '../services/auth_service.dart';
 
@@ -17,6 +18,7 @@ class AuthController extends GetxController {
   RxBool isLoading = false.obs;
   Rx<File?> pickedImage = Rx<File?>(null);
   final box = GetStorage();
+  GoogleSignIn googleSignIn = GoogleSignIn();
 
   Future<void> loadUserData() async {
     final userData = box.read('userData');
@@ -82,6 +84,8 @@ class AuthController extends GetxController {
   Future<void> signOut() async {
     await _authService.signOut();
     box.remove('userData');
+
+    await googleSignIn.signOut();
 
     Get.offAllNamed(Routes.signin);
   }

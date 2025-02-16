@@ -1,4 +1,5 @@
 import 'package:book_reviewer/controllers/auth_controller.dart';
+import 'package:book_reviewer/views/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:book_reviewer/routes/routes.dart';
@@ -15,27 +16,24 @@ class SplashScreen extends StatelessWidget {
           : Routes.bottomNav);
     });
 
-    return const Scaffold(
-      backgroundColor: Colors.blue,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.book,
-              size: 100.0,
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/splashScreen.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Center(
+          child: Transform(
+            transform: Matrix4.skewX(-0.15),
+            child: const TextWidget(
+              text: 'Book Reviewer',
+              fontSize: 36,
               color: Colors.white,
+              fontWeight: FontWeight.bold,
             ),
-            SizedBox(height: 20),
-            Text(
-              'Book Reviewer',
-              style: TextStyle(
-                fontSize: 24,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
