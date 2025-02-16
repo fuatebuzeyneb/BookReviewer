@@ -1,3 +1,4 @@
+import 'package:book_reviewer/controllers/auth_controller.dart';
 import 'package:book_reviewer/controllers/book_controller.dart';
 import 'package:book_reviewer/controllers/comment_controller.dart';
 import 'package:book_reviewer/models/comment_model.dart';
@@ -30,6 +31,7 @@ class _AddCommentAndRateWidgetState extends State<AddCommentAndRateWidget> {
   double bottomSheetHeight = 0.4;
   final CommentController commentController = Get.find<CommentController>();
   final BookController bookController = Get.find<BookController>();
+  final AuthController authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +127,7 @@ class _AddCommentAndRateWidgetState extends State<AddCommentAndRateWidget> {
                       bookId: bookController.selectedBook!.id,
                       comment: CommentModel(
                         commentText: textCommentController.text,
-                        userId: bookController.selectedBook!.userId,
+                        userId: authController.userModel.value!.uid,
                         userName: bookController.selectedBook!.publisherName,
                         ratingValue: ratingNotifier.value,
                         userImageUrl:

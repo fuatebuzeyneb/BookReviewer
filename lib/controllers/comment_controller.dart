@@ -29,6 +29,8 @@ class CommentController extends GetxController {
       CommentModel? comment =
           await CommentService.getUserComment(bookId, userId);
       userComment.value = comment; // تحديث الحالة
+
+      print("User comment----------------------------: ${comment!.userId}");
     } catch (e) {
       print("Error fetching user comment: $e");
     }
@@ -51,11 +53,19 @@ class CommentController extends GetxController {
   }
 
   // حذف تعليق
-  void deleteComment(String bookId, String commentId) async {
+  Future<void> deleteComment(
+      {required String bookId, required int index}) async {
     try {
-      await CommentService.deleteCommentFromFirebase(bookId, commentId);
-      // إزالة التعليق محلياً
-      comments.removeWhere((comment) => comment.userId == commentId);
+      await CommentService.deleteCommentFromFirebase(bookId, index);
+
+      // إزالة التعليق محلياً بناءً على index
+      if (index >= 0 && index < comments.length) {
+        comments.removeAt(index);
+      } else {
+        print("Index out of range: $index");
+      }
+
+      print("Comment deleted successfully at index: $index");
     } catch (e) {
       print("Error deleting comment: $e");
     }

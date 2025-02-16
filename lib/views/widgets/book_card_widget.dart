@@ -1,3 +1,4 @@
+import 'package:book_reviewer/controllers/auth_controller.dart';
 import 'package:book_reviewer/controllers/book_controller.dart';
 import 'package:book_reviewer/controllers/comment_controller.dart';
 import 'package:book_reviewer/models/book_model.dart';
@@ -101,7 +102,10 @@ class bookCardWidget extends StatelessWidget {
                             onTap: () {
                               Get.find<CommentController>().fetchUserComment(
                                   bookId: books[index].id,
-                                  userId: books[index].userId);
+                                  userId: Get.find<AuthController>()
+                                      .userModel
+                                      .value!
+                                      .uid);
                               Get.find<BookController>()
                                   .loadBookById(books[index].id);
                               Get.toNamed(Routes.bookDetailsView);

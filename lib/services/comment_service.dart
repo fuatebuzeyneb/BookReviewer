@@ -25,21 +25,34 @@ class CommentService {
   static Future<CommentModel?> getUserComment(
       String bookId, String userId) async {
     try {
-      var querySnapshot = await FirebaseFirestore.instance
+      final bookSnapshot = await FirebaseFirestore.instance
           .collection('books')
           .doc(bookId)
-          .collection('comments')
-          .where('userId', isEqualTo: userId)
-          .limit(1)
-          .get();
+          .get(); // الحصول على المستند مباشرة
 
-      if (querySnapshot.docs.isNotEmpty) {
-        return CommentModel.fromJson(querySnapshot.docs.first.data());
+      // التأكد من وجود حقل "comments" في المستند
+      if (!bookSnapshot.exists ||
+          !bookSnapshot.data()!.containsKey('comments')) {
+        print("No comments found for book $bookId");
+        return null; // إذا لم يكن هناك تعليقات، نرجع null
       }
-      return null;
+
+      // استخراج التعليقات من الحقل "comments"
+      final commentsData = bookSnapshot.data()!['comments'] as List<dynamic>;
+
+      // تصفية التعليقات حسب userId
+      final userComment = commentsData
+          .where((commentData) =>
+              CommentModel.fromJson(commentData).userId == userId)
+          .map((commentData) => CommentModel.fromJson(commentData))
+          .firstWhere(
+            (comment) => comment.userId == userId,
+          ); // إرجاع أول تعليق يتطابق مع userId أو null
+
+      return userComment; // هنا سيتم إرجاع نوع CommentModel؟
     } catch (e) {
       print("Error fetching user comment: $e");
-      return null;
+      return null; // في حالة حدوث خطأ نرجع null
     }
   }
 
@@ -61,14 +74,31 @@ class CommentService {
 
   // حذف تعليق
   static Future<void> deleteCommentFromFirebase(
-      String bookId, String commentId) async {
+      String bookId, int index) async {
     try {
-      await FirebaseFirestore.instance
-          .collection('books')
-          .doc(bookId)
-          .collection('comments')
-          .doc(commentId)
-          .delete();
+      final bookRef =
+          FirebaseFirestore.instance.collection('books').doc(bookId);
+
+      final bookSnapshot = await bookRef.get();
+      if (!bookSnapshot.exists) {
+        print("Book not found");
+        return;
+      }
+
+      List<dynamic> comments = bookSnapshot.data()?['comments'] ?? [];
+
+      if (index < 0 || index >= comments.length) {
+        print("Invalid index: $index");
+        return;
+      }
+
+      // حذف التعليق بناءً على `index`
+      comments.removeAt(index);
+
+      // تحديث Firestore فقط إذا تم حذف تعليق
+      await bookRef.update({'comments': comments});
+
+      print("Comment deleted successfully at index: $index");
     } catch (e) {
       print("Error deleting comment from Firebase: $e");
     }
