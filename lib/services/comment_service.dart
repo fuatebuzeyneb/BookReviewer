@@ -57,16 +57,32 @@ class CommentService {
   }
 
   // تحديث تعليق
-  static Future<void> updateCommentInFirebase(
-      String bookId, String commentId, CommentModel updatedComment) async {
+  static Future<void> editCommentInFirebase(
+      String bookId, int index, CommentModel updatedComment) async {
     try {
-      final commentData = updatedComment.toJson();
-      await FirebaseFirestore.instance
-          .collection('books')
-          .doc(bookId)
-          .collection('comments')
-          .doc(commentId)
-          .update(commentData);
+      final bookRef =
+          FirebaseFirestore.instance.collection('books').doc(bookId);
+
+      final bookSnapshot = await bookRef.get();
+      if (!bookSnapshot.exists) {
+        print("Book not found");
+        return;
+      }
+
+      List<dynamic> comments = bookSnapshot.data()?['comments'] ?? [];
+
+      if (index < 0 || index >= comments.length) {
+        print("Invalid index: $index");
+        return;
+      }
+
+      // تحديث التعليق في القائمة بناءً على `index`
+      comments[index] = updatedComment.toJson(); // تحديث التعليق الجديد
+
+      // تحديث Firestore فقط إذا تم تعديل تعليق
+      await bookRef.update({'comments': comments});
+
+      print("Comment updated successfully at index: $index");
     } catch (e) {
       print("Error updating comment in Firebase: $e");
     }

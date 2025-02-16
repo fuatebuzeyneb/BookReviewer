@@ -37,16 +37,23 @@ class CommentController extends GetxController {
   }
 
   // تعديل تعليق
-  void updateComment(
-      String bookId, String commentId, CommentModel updatedComment) async {
+  Future<void> editComment(
+      {required String bookId,
+      required int index,
+      required CommentModel updatedComment}) async {
     try {
-      await CommentService.updateCommentInFirebase(
-          bookId, commentId, updatedComment);
-      // تحديث التعليق محلياً
-      int index = comments.indexWhere((comment) => comment.userId == commentId);
-      if (index != -1) {
+      // استدعاء الـ Service لتحديث التعليق في Firebase
+      await CommentService.editCommentInFirebase(bookId, index, updatedComment);
+
+      // تحديث التعليق محليًا بناءً على `index`
+      if (index >= 0 && index < comments.length) {
+        // تحديث النص والتقييم محليًا
         comments[index] = updatedComment;
+      } else {
+        print("Index out of range: $index");
       }
+
+      print("Comment updated successfully at index: $index");
     } catch (e) {
       print("Error updating comment: $e");
     }

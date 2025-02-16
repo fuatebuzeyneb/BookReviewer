@@ -9,6 +9,7 @@ import 'package:book_reviewer/views/widgets/loading_widget.dart';
 import 'package:book_reviewer/views/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:get/get_core/get_core.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/get_navigation/get_navigation.dart';
@@ -95,7 +96,7 @@ class BookDetailsView extends StatelessWidget {
                                           ),
                                           TextWidget(
                                             text: bookController
-                                                .selectedBook!.publisherName,
+                                                .selectedBook!.author,
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold,
                                             color: AppColors.greenAccent,
@@ -235,7 +236,9 @@ class BookDetailsView extends StatelessWidget {
                                         isScrollControlled: true,
                                         enableDrag: false,
                                         builder: (context) {
-                                          return const AddCommentAndRateWidget();
+                                          return const AddCommentAndRateWidget(
+                                            itIsEdit: false,
+                                          );
                                         },
                                       );
                                     },
@@ -243,6 +246,7 @@ class BookDetailsView extends StatelessWidget {
                                     width: 1,
                                     color: AppColors.greenAccent,
                                     text: 'Add Review',
+                                    fontSize: 16,
                                   )
                                 : Stack(
                                     clipBehavior: Clip.none,
@@ -322,7 +326,7 @@ class BookDetailsView extends StatelessWidget {
                                                                   .comments
                                                                   .indexWhere((comment) =>
                                                                       comment
-                                                                          .userId !=
+                                                                          .userId ==
                                                                       authController
                                                                           .userModel
                                                                           .value!
@@ -351,13 +355,14 @@ class BookDetailsView extends StatelessWidget {
                                                         .comments[bookController
                                                             .selectedBook!
                                                             .comments
-                                                            .indexWhere((comment) =>
-                                                                comment
-                                                                    .userId !=
-                                                                authController
-                                                                    .userModel
-                                                                    .value!
-                                                                    .uid)]
+                                                            .indexWhere(
+                                                      (comment) =>
+                                                          comment.userId ==
+                                                          authController
+                                                              .userModel
+                                                              .value!
+                                                              .uid,
+                                                    )]
                                                         .commentText,
                                                     fontSize: 10,
                                                     textAlign:
@@ -378,7 +383,28 @@ class BookDetailsView extends StatelessWidget {
                                             borderRadius: 20,
                                             paddingHorizontal: 6,
                                             paddingVertical: 6,
-                                            onTap: () {},
+                                            onTap: () {
+                                              showModalBottomSheet(
+                                                context: context,
+                                                isScrollControlled: true,
+                                                enableDrag: false,
+                                                builder: (context) {
+                                                  return AddCommentAndRateWidget(
+                                                      itIsEdit: true,
+                                                      index: bookController
+                                                          .selectedBook!
+                                                          .comments
+                                                          .indexWhere(
+                                                        (comment) =>
+                                                            comment.userId ==
+                                                            authController
+                                                                .userModel
+                                                                .value!
+                                                                .uid,
+                                                      ));
+                                                },
+                                              );
+                                            },
                                             height: 0,
                                             width: 0,
                                             color: AppColors.greenAccent,

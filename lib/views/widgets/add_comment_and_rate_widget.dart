@@ -17,7 +17,10 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/get_instance.dart';
 
 class AddCommentAndRateWidget extends StatefulWidget {
-  const AddCommentAndRateWidget({super.key});
+  final bool itIsEdit;
+  final int? index;
+  const AddCommentAndRateWidget(
+      {super.key, required this.itIsEdit, this.index});
 
   @override
   _AddCommentAndRateWidgetState createState() =>
@@ -97,7 +100,9 @@ class _AddCommentAndRateWidgetState extends State<AddCommentAndRateWidget> {
                   valueListenable: ratingNotifier,
                   builder: (context, rating, _) {
                     return TextWidget(
-                      text: 'Rate: (${rating.toString()})',
+                      text: widget.itIsEdit == true
+                          ? 'Rate: ${commentController.userComment.value!.ratingValue.toString()}'
+                          : 'Rate: (${rating.toString()})',
                       fontSize: 16,
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -109,7 +114,9 @@ class _AddCommentAndRateWidgetState extends State<AddCommentAndRateWidget> {
             const SizedBox(height: 12),
             TextFieldWidget(
               controller: textCommentController,
-              hint: 'Enter your comment',
+              hint: widget.itIsEdit == true
+                  ? commentController.userComment.value!.commentText
+                  : 'Enter your comment',
               maxLines: 4,
               borderRadius: 12,
               paddingVertical: 12,
@@ -123,17 +130,32 @@ class _AddCommentAndRateWidgetState extends State<AddCommentAndRateWidget> {
                 paddingHorizontal: 12,
                 paddingVertical: 8,
                 onTap: () {
-                  commentController.addComment(
-                      bookId: bookController.selectedBook!.id,
-                      comment: CommentModel(
-                        commentText: textCommentController.text,
-                        userId: authController.userModel.value!.uid,
-                        userName: bookController.selectedBook!.publisherName,
-                        ratingValue: ratingNotifier.value,
-                        userImageUrl:
-                            bookController.selectedBook!.publisherImageUrl,
-                        createdAt: DateTime.now(),
-                      ));
+                  if (widget.itIsEdit == false) {
+                    commentController.addComment(
+                        bookId: bookController.selectedBook!.id,
+                        comment: CommentModel(
+                          commentText: textCommentController.text,
+                          userId: authController.userModel.value!.uid,
+                          userName: bookController.selectedBook!.publisherName,
+                          ratingValue: ratingNotifier.value,
+                          userImageUrl:
+                              bookController.selectedBook!.publisherImageUrl,
+                          createdAt: DateTime.now(),
+                        ));
+                  } else {
+                    commentController.editComment(
+                        bookId: bookController.selectedBook!.id,
+                        index: widget.index!,
+                        updatedComment: CommentModel(
+                          commentText: textCommentController.text,
+                          userId: authController.userModel.value!.uid,
+                          userName: bookController.selectedBook!.publisherName,
+                          ratingValue: ratingNotifier.value,
+                          userImageUrl:
+                              bookController.selectedBook!.publisherImageUrl,
+                          createdAt: DateTime.now(),
+                        ));
+                  }
                   FocusScope.of(context).unfocus();
                 },
                 text: 'Send',
