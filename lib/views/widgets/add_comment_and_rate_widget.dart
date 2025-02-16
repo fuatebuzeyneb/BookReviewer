@@ -30,7 +30,7 @@ class AddCommentAndRateWidget extends StatefulWidget {
 class _AddCommentAndRateWidgetState extends State<AddCommentAndRateWidget> {
   final ValueNotifier<double> ratingNotifier = ValueNotifier(3.0);
   final FocusNode focusNode = FocusNode();
-  final TextEditingController textCommentController = TextEditingController();
+  TextEditingController textCommentController = TextEditingController();
   double bottomSheetHeight = 0.4;
   final CommentController commentController = Get.find<CommentController>();
   final BookController bookController = Get.find<BookController>();
@@ -45,6 +45,10 @@ class _AddCommentAndRateWidgetState extends State<AddCommentAndRateWidget> {
     if (isKeyboardVisible != (bottomSheetHeight > 0.4)) {
       setState(() {
         bottomSheetHeight = isKeyboardVisible ? 0.7 : 0.4;
+        textCommentController = widget.itIsEdit == true
+            ? TextEditingController(
+                text: commentController.userComment.value!.commentText)
+            : TextEditingController(text: textCommentController.text);
       });
     }
 
@@ -80,7 +84,9 @@ class _AddCommentAndRateWidgetState extends State<AddCommentAndRateWidget> {
             Row(
               children: [
                 RatingBar.builder(
-                  initialRating: 3,
+                  initialRating: widget.itIsEdit == true
+                      ? commentController.userComment.value!.ratingValue
+                      : 3,
                   minRating: 1,
                   direction: Axis.horizontal,
                   allowHalfRating: true,
@@ -92,7 +98,12 @@ class _AddCommentAndRateWidgetState extends State<AddCommentAndRateWidget> {
                     color: Colors.amber,
                   ),
                   onRatingUpdate: (rating) {
+                    // عند تغيير التقييم من المستخدم
                     ratingNotifier.value = rating;
+                    // تحديث التقييم في الكومنت، لو كانت في وضع التعديل
+                    if (widget.itIsEdit == true) {
+                      commentController.userComment.value!.ratingValue = rating;
+                    }
                   },
                 ),
                 const SizedBox(width: 8),

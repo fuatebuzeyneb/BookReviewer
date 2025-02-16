@@ -4,7 +4,7 @@ class CommentModel {
   final String userImageUrl;
   final String commentText;
   final DateTime createdAt;
-  final double ratingValue;
+  double ratingValue;
 
   CommentModel({
     required this.userId,
