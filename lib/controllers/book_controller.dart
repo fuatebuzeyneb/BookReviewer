@@ -105,23 +105,37 @@ class BookController extends GetxController {
     }
   }
 
-  // إضافة تعليق
-  Future<void> addComment(String bookId, CommentModel comment) async {
+  Future<void> deleteBook(String bookId) async {
     try {
-      await _bookService.addComment(bookId, comment);
-      Get.snackbar('نجاح', 'تمت إضافة التعليق بنجاح!');
+      isLoading.value = true;
+
+      // استخدام BookService لحذف الكتاب
+      await _bookService.deleteBook(bookId);
+      Get.snackbar('نجاح', 'تم حذف الكتاب بنجاح!');
+
+      isLoading.value = false;
     } catch (e) {
-      Get.snackbar('خطأ', 'حدث خطأ أثناء إضافة التعليق: $e');
+      isLoading.value = false;
+      Get.snackbar('خطأ', 'حدث خطأ أثناء حذف الكتاب: $e');
     }
   }
 
-  // تحديث التقييم
-  Future<void> updateRating(String bookId, double newRating) async {
+  Future<void> editBook({
+    required BookModel updatedBook,
+  }) async {
     try {
-      await _bookService.updateRating(bookId, newRating);
-      Get.snackbar('نجاح', 'تم تحديث التقييم بنجاح!');
+      isLoading.value = true;
+
+      // إرسال التعديل إلى BookService
+      await _bookService.editBook(updatedBook, pickedImage.value!);
+      Get.snackbar('نجاح', 'تم تعديل الكتاب بنجاح!');
+
+      isLoading.value = false;
     } catch (e) {
-      Get.snackbar('خطأ', 'حدث خطأ أثناء تحديث التقييم: $e');
+      isLoading.value = false;
+      Get.snackbar('خطأ', 'حدث خطأ أثناء تعديل الكتاب: $e');
     }
   }
+
+  // إضافة تعليق
 }

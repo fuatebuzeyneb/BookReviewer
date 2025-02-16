@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:book_reviewer/controllers/auth_controller.dart';
 import 'package:book_reviewer/controllers/book_controller.dart';
+import 'package:book_reviewer/models/book_model.dart';
 import 'package:book_reviewer/themes/app_colors.dart';
 import 'package:book_reviewer/themes/extensions.dart';
 import 'package:book_reviewer/views/widgets/button_widget.dart';
@@ -10,17 +13,31 @@ import 'package:book_reviewer/views/widgets/upload_picture_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/get_core.dart';
 import 'package:get/get_instance/get_instance.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class AddBookView extends StatelessWidget {
-  AddBookView({super.key});
+  final bool? itIsEdit;
+  AddBookView({super.key, this.itIsEdit = false});
+
   final TextEditingController bookNameController = TextEditingController();
   final TextEditingController authorNameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final BookController bookController = Get.find<BookController>();
+
+  // استلام الـ index من Get.arguments
+
   @override
   Widget build(BuildContext context) {
+    // إذا كانت في وضع التعديل، قم بتحديث المتحكمات
+    if (itIsEdit == true) {
+      int index = Get.arguments['index'];
+      bookNameController.text = bookController.userBooks[index].title;
+      authorNameController.text = bookController.userBooks[index].author;
+      descriptionController.text = bookController.userBooks[index].description;
+    }
+
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
@@ -28,8 +45,8 @@ class AddBookView extends StatelessWidget {
         surfaceTintColor: Colors.white,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: const TextWidget(
-          text: 'Add Book',
+        title: TextWidget(
+          text: itIsEdit == true ? 'Edit Book' : 'Add Book',
           fontSize: 20,
           fontWeight: FontWeight.bold,
           color: Colors.black,
@@ -46,7 +63,11 @@ class AddBookView extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const UploadPictureWidget(
+                    UploadPictureWidget(
+                      imageUrl: itIsEdit == false
+                          ? null
+                          : bookController
+                              .userBooks[Get.arguments['index']].coverImageUrl,
                       witchType: 1,
                     ),
                     const SizedBox(height: 8),
@@ -68,7 +89,8 @@ class AddBookView extends StatelessWidget {
                     SizedBox(height: context.height * 0.04),
                     ButtonWidget(
                       onTap: () {
-                        bookController.addBook(
+                        if (itIsEdit == false) {
+                          bookController.addBook(
                             title: bookNameController.text,
                             author: authorNameController.text,
                             description: descriptionController.text,
@@ -81,9 +103,38 @@ class AddBookView extends StatelessWidget {
                                 .value!
                                 .profilePicture!,
                             coverImageUrl:
-                                bookController.pickedImage.value.toString());
+                                bookController.pickedImage.value.toString(),
+                          );
+                        } else {
+                          bookController.editBook(
+                              updatedBook: BookModel(
+                            title: bookNameController.text,
+                            author: authorNameController.text,
+                            description: descriptionController.text,
+                            id: bookController
+                                .userBooks[Get.arguments['index']].id,
+                            coverImageUrl:
+                                bookController.pickedImage.value.toString(),
+                            userId: bookController
+                                .userBooks[Get.arguments['index']]
+                                .userId, // سيتم تعبئته في BookService
+                            rating: Random().nextDouble() * (5.0 - 2.0) +
+                                2.0, // تقييم افتراضي
+                            comments: bookController
+                                .userBooks[Get.arguments['index']]
+                                .comments, // قائمة تعليقات فارغة
+                            createdAt: bookController
+                                .userBooks[Get.arguments['index']].createdAt,
+                            publisherName: bookController
+                                .userBooks[Get.arguments['index']]
+                                .publisherName, // هذه القيمة ستظل ثابتة ولا تتغير
+                            publisherImageUrl: bookController
+                                .userBooks[Get.arguments['index']]
+                                .publisherImageUrl, // هذه القيمة ستظل ثابتة ولا تتغير
+                          ));
+                        }
                       },
-                      text: 'Add Book',
+                      text: itIsEdit == true ? 'Edit Book' : 'Add Book',
                       height: 0.06,
                       width: 0.7,
                       colorText: Colors.white,

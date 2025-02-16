@@ -73,6 +73,45 @@ class BookService {
     }
   }
 
+  // حذف الكتاب من Firebase
+  Future<void> deleteBook(String bookId) async {
+    try {
+      // حذف الكتاب من مجموعة "books"
+      await _firestore.collection('books').doc(bookId).delete();
+      print("تم حذف الكتاب بنجاح");
+    } catch (e) {
+      throw Exception("حدث خطأ أثناء حذف الكتاب: $e");
+    }
+  }
+
+  // تعديل الكتاب في Firebase
+  Future<void> editBook(BookModel updatedBook, File imageFile) async {
+    try {
+      String? imageUrl = await uploadImage(imageFile, updatedBook.id);
+
+      BookModel newBook = BookModel(
+          id: updatedBook.id,
+          title: updatedBook.title,
+          author: updatedBook.author,
+          description: updatedBook.description,
+          coverImageUrl: imageUrl!, // حفظ الرابط هنا
+          userId: updatedBook.userId,
+          rating: updatedBook.rating, // إضافة التقييم
+          comments: updatedBook.comments, // إضافة التعليقات (إن وجدت)
+          createdAt: DateTime.now(),
+          publisherName: updatedBook.publisherName,
+          publisherImageUrl: updatedBook.publisherImageUrl);
+      // تحديث الكتاب في مجموعة "books"
+      await _firestore
+          .collection('books')
+          .doc(updatedBook.id)
+          .update(updatedBook.toJson());
+      print("تم تعديل الكتاب بنجاح");
+    } catch (e) {
+      throw Exception("حدث خطأ أثناء تعديل الكتاب: $e");
+    }
+  }
+
   Future<List<BookModel>> fetchBooks({int limit = 8}) async {
     try {
       Query query = _firestore
@@ -166,32 +205,4 @@ class BookService {
   }
 
   // إضافة تعليق إلى الكتاب
-  Future<void> addComment(String bookId, CommentModel comment) async {
-    try {
-      DocumentReference bookRef = _firestore.collection('books').doc(bookId);
-
-      // إضافة التعليق إلى قائمة التعليقات في Firestore
-      await bookRef.update({
-        'comments': FieldValue.arrayUnion([comment.toJson()])
-      });
-
-      print("تمت إضافة التعليق بنجاح");
-    } catch (e) {
-      print("حدث خطأ أثناء إضافة التعليق: $e");
-    }
-  }
-
-  // تحديث التقييم
-  Future<void> updateRating(String bookId, double newRating) async {
-    try {
-      DocumentReference bookRef = _firestore.collection('books').doc(bookId);
-
-      // تحديث التقييم في Firestore
-      await bookRef.update({'rating': newRating});
-
-      print("تم تحديث التقييم بنجاح");
-    } catch (e) {
-      print("حدث خطأ أثناء تحديث التقييم: $e");
-    }
-  }
 }

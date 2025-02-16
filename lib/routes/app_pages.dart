@@ -6,7 +6,7 @@ import 'package:book_reviewer/views/screens/main_screens/pfofile_view.dart';
 import 'package:book_reviewer/views/screens/other_screens/book_details_view.dart';
 import 'package:book_reviewer/views/screens/other_screens/my_books_view.dart';
 import 'package:book_reviewer/views/screens/other_screens/splash_view.dart';
-import 'package:book_reviewer/views/screens/test.dart';
+import 'package:book_reviewer/views/screens/other_screens/all_books_view.dart';
 import 'package:book_reviewer/views/widgets/bottom_nav_bar.dart';
 import 'package:get/get.dart';
 
@@ -18,11 +18,15 @@ class AppPages {
     GetPage(name: Routes.signup, page: () => SignupView()),
     GetPage(name: Routes.homeView, page: () => HomeView()),
     GetPage(name: Routes.profileView, page: () => ProfileView()),
-    GetPage(name: Routes.addBookView, page: () => AddBookView()),
+    GetPage(
+        name: Routes.addBookView,
+        page: () => AddBookView(
+              itIsEdit: true,
+            )),
     GetPage(name: Routes.bottomNav, page: () => const BottomNavBar()),
     GetPage(name: Routes.bookDetailsView, page: () => BookDetailsView()),
     GetPage(name: Routes.splash, page: () => const SplashScreen()),
     GetPage(name: Routes.myBooksView, page: () => MyBooksView()),
-    GetPage(name: Routes.seeAllView, page: () => BooksPage()),
+    GetPage(name: Routes.allBooksView, page: () => AllBooksView()),
   ];
 }

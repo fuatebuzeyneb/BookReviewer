@@ -1,17 +1,30 @@
 import 'package:book_reviewer/controllers/book_controller.dart';
 import 'package:book_reviewer/views/widgets/book_card_widget.dart';
+import 'package:book_reviewer/views/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class BooksPage extends StatelessWidget {
+class AllBooksView extends StatelessWidget {
   final BookController controller = Get.put(BookController());
 
-  BooksPage({super.key});
+  AllBooksView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("الكتب")),
+      backgroundColor: Colors.grey[100],
+      appBar: AppBar(
+        centerTitle: true,
+        surfaceTintColor: Colors.white,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: const TextWidget(
+          text: 'All Books',
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+      ),
       body: Obx(() => ListView.builder(
             controller: controller.scrollController, // ربط الـ ScrollController
             itemCount: controller.books.length + 1, // إضافة عنصر اللودينغ

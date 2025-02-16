@@ -156,7 +156,7 @@ class HomeView extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
                 GestureDetector(
-                  onTap: () => Get.toNamed(Routes.seeAllView),
+                  onTap: () => Get.toNamed(Routes.allBooksView),
                   child: const TextWidget(
                     text: 'See All',
                     fontSize: 14,

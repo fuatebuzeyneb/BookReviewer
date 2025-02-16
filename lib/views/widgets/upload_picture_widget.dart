@@ -9,8 +9,10 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart'; // لاستيراد مكتبة اختيار الصورة
 
 class UploadPictureWidget extends StatefulWidget {
+  final String? imageUrl;
   final int witchType;
-  const UploadPictureWidget({super.key, required this.witchType});
+  const UploadPictureWidget(
+      {super.key, required this.witchType, this.imageUrl});
 
   @override
   _UploadPictureWidgetState createState() => _UploadPictureWidgetState();
@@ -67,8 +69,15 @@ class _UploadPictureWidgetState extends State<UploadPictureWidget> {
                   File(_imagePath!), // عرض الصورة التي تم اختيارها
                   fit: BoxFit.cover,
                 )
-              : const Icon(Icons.image,
-                  color: Colors.grey, size: 30), // إذا لم يتم اختيار صورة بعد
+              : widget.imageUrl != null
+                  ? Image.network(
+                      widget
+                          .imageUrl!, // عرض الصورة من الإنترنت إذا تم تمرير رابط
+                      fit: BoxFit.cover,
+                    )
+                  : const Icon(Icons.image,
+                      color: Colors.grey,
+                      size: 30), // إذا لم يتم اختيار صورة بعد
         ),
         Positioned(
             top: -10,
