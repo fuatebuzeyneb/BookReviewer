@@ -105,7 +105,7 @@ class BookService {
       await _firestore
           .collection('books')
           .doc(updatedBook.id)
-          .update(updatedBook.toJson());
+          .update(newBook.toJson());
       print("تم تعديل الكتاب بنجاح");
     } catch (e) {
       throw Exception("حدث خطأ أثناء تعديل الكتاب: $e");
