@@ -29,7 +29,7 @@ class bookCardWidget extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 6, left: 6, right: 6),
       child: ButtonWidget(
         showElevation: true,
-        borderRadius: 12,
+        borderRadius: 6,
         height: 0.12,
         width: 1,
         color: Colors.white,
@@ -84,9 +84,9 @@ class bookCardWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Row(children: [
-                          const Icon(
+                          Icon(
                             Icons.star,
-                            color: Colors.yellow,
+                            color: Colors.yellow.shade700,
                             size: 18,
                           ),
                           const SizedBox(width: 4),

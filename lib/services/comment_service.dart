@@ -121,21 +121,4 @@ class CommentService {
   }
 
   // جلب التعليقات
-  static Future<List<CommentModel>> fetchCommentsFromFirebase(
-      String bookId) async {
-    try {
-      final querySnapshot = await FirebaseFirestore.instance
-          .collection('books')
-          .doc(bookId)
-          .collection('comments')
-          .get();
-
-      return querySnapshot.docs
-          .map((doc) => CommentModel.fromJson(doc.data()))
-          .toList();
-    } catch (e) {
-      print("Error fetching comments from Firebase: $e");
-      return [];
-    }
-  }
 }

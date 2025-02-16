@@ -1,3 +1,4 @@
+import 'package:book_reviewer/controllers/book_controller.dart';
 import 'package:book_reviewer/models/comment_model.dart';
 import 'package:book_reviewer/services/comment_service.dart';
 import 'package:get/get.dart';
@@ -21,10 +22,10 @@ class CommentController extends GetxController {
       // تحديث الـ UI إذا كنت تستخدم GetX
       Get.back();
 
-      Get.snackbar('نجاح', 'تمت إضافة التعليق بنجاح!');
+      Get.snackbar('success', 'Comment added successfully!');
     } catch (e) {
       print("Error adding comment: $e");
-      Get.snackbar('خطأ', 'فشل إضافة التعليق: $e');
+      Get.snackbar('error', 'Failed to add comment: $e');
     }
   }
 
@@ -57,19 +58,24 @@ class CommentController extends GetxController {
       if (index >= 0 && index < comments.length) {
         // تحديث النص والتقييم محليًا
         comments[index] = updatedComment;
+
+        final bookController = Get.find<BookController>();
+
+        // إعادة تحميل بيانات الكتاب بعد التعديل
+        await bookController.loadBookById(bookId);
       } else {
         isLoading.value = false;
         print("Index out of range: $index");
       }
 
       isLoading.value = false;
-      update();
 
       Get.back();
-      print("Comment updated successfully at index: $index");
+
+      Get.snackbar('success', 'Comment edited successfully!');
     } catch (e) {
-      isLoading.value = false;
-      print("Error updating comment: $e");
+      print("Error adding comment: $e");
+      Get.snackbar('error', 'Failed to add comment: $e');
     }
   }
 
@@ -83,30 +89,23 @@ class CommentController extends GetxController {
       // إزالة التعليق محلياً بناءً على index
       if (index >= 0 && index < comments.length) {
         comments.removeAt(index);
+        final bookController = Get.find<BookController>();
+
+        // إعادة تحميل بيانات الكتاب بعد التعديل
+        await bookController.loadBookById(bookId);
       } else {
         isLoading.value = false;
         print("Index out of range: $index");
       }
       isLoading.value = false;
       update();
-      print("Comment deleted successfully at index: $index");
+
+      Get.snackbar('success', 'Comment deleted successfully!');
     } catch (e) {
-      isLoading.value = false;
-      print("Error deleting comment: $e");
+      print("Error adding comment: $e");
+      Get.snackbar('error', 'Failed to add comment: $e');
     }
   }
 
-  // // جلب التعليقات من Firebase
-  // Future<void> fetchComments(String bookId) async {
-  //   try {
-  //     isLoading.value = true;
-  //     final fetchedComments =
-  //         await CommentService.fetchCommentsFromFirebase(bookId);
-  //     comments.value = fetchedComments; // تحديث التعليقات
-  //     isLoading.value = false;
-  //   } catch (e) {
-  //     isLoading.value = false;
-  //     print("Error fetching comments: $e");
-  //   }
-  // }
+  // جلب التعليقات من Firebase
 }

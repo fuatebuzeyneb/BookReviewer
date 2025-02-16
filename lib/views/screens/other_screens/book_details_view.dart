@@ -110,9 +110,9 @@ class BookDetailsView extends StatelessWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                        const Icon(
+                                        Icon(
                                           Icons.star,
-                                          color: Colors.yellow,
+                                          color: Colors.yellow.shade700,
                                           size: 18,
                                         ),
                                         const SizedBox(width: 4),
