@@ -55,7 +55,15 @@ class BookController extends GetxController {
 
   // تحميل كتب مستخدم معين
   Future<void> loadUserBooks(String userId) async {
-    userBooks.value = await _bookService.fetchUserBooks(userId);
+    try {
+      isLoading.value = true;
+      userBooks.value = await _bookService.fetchUserBooks(userId);
+    } catch (e) {
+      // التعامل مع الخطأ هنا
+      Get.snackbar('error', 'Failed to load user books: $e');
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   Future<void> loadBookById(String bookId) async {
@@ -105,12 +113,12 @@ class BookController extends GetxController {
       await loadRatingBooks();
       await getLatestBooks();
       await loadUserBooks(book.userId);
-      Get.snackbar('نجاح', 'تمت إضافة الكتاب بنجاح!');
+      Get.snackbar('success', 'Book added successfully!');
 
       isLoading.value = false;
     } catch (e) {
       isLoading.value = false;
-      Get.snackbar('خطأ', 'حدث خطأ أثناء إضافة الكتاب: $e');
+      Get.snackbar('error', 'Failed to add book: $e');
     }
   }
 
@@ -123,12 +131,12 @@ class BookController extends GetxController {
       await loadRatingBooks();
       await getLatestBooks();
       await loadUserBooks(userId);
-      Get.snackbar('نجاح', 'تم حذف الكتاب بنجاح!');
+      Get.snackbar('success', 'Book deleted successfully!');
 
       isLoading.value = false;
     } catch (e) {
       isLoading.value = false;
-      Get.snackbar('خطأ', 'حدث خطأ أثناء حذف الكتاب: $e');
+      Get.snackbar('error', 'Failed to delete book: $e');
     }
   }
 
@@ -145,12 +153,12 @@ class BookController extends GetxController {
       await loadRatingBooks();
       await getLatestBooks();
       await loadUserBooks(updatedBook.userId);
-      Get.snackbar('نجاح', 'تم تعديل الكتاب بنجاح!');
+      Get.snackbar('success', 'Book edited successfully!');
 
       isLoading.value = false;
     } catch (e) {
       isLoading.value = false;
-      Get.snackbar('خطأ', 'حدث خطأ أثناء تعديل الكتاب: $e');
+      Get.snackbar('error', 'Failed to edit book: $e');
       print(e);
     }
   }

@@ -27,7 +27,9 @@ class BookDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() => ModalProgressHUD(
-          inAsyncCall: bookController.isLoading.value,
+          inAsyncCall: commentController.isLoading.value ||
+              bookController.isLoading.value ||
+              authController.isLoading.value,
           progressIndicator: const LoadingWidget(),
           child: Scaffold(
             resizeToAvoidBottomInset: true,
@@ -228,225 +230,31 @@ class BookDetailsView extends StatelessWidget {
                         bookController.selectedBook!.userId ==
                                 authController.userModel.value!.uid
                             ? const SizedBox()
-                            : commentController.userComment.value == null
-                                ? ButtonWidget(
-                                    onTap: () {
-                                      showModalBottomSheet(
-                                        context: context,
-                                        isScrollControlled: true,
-                                        enableDrag: false,
-                                        builder: (context) {
-                                          return const AddCommentAndRateWidget(
-                                            itIsEdit: false,
-                                          );
-                                        },
+                            : ButtonWidget(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    enableDrag: false,
+                                    builder: (context) {
+                                      return const AddCommentAndRateWidget(
+                                        itIsEdit: false,
                                       );
                                     },
-                                    height: 0.05,
-                                    width: 1,
-                                    color: AppColors.greenAccent,
-                                    text: 'Add Review',
-                                    fontSize: 16,
-                                  )
-                                : Stack(
-                                    clipBehavior: Clip.none,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 8),
-                                        child: ButtonWidget(
-                                          onTap: () {
-                                            // showModalBottomSheet(
-                                            //   context: context,
-                                            //   isScrollControlled: true,
-                                            //   enableDrag: false,
-                                            //   builder: (context) {
-                                            //     return const AddCommentAndRateWidget();
-                                            //   },
-                                            // );
-                                          },
-                                          color: Colors.white,
-                                          height: 0.15,
-                                          width: 1,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(children: [
-                                                    CircleAvatar(
-                                                      backgroundColor:
-                                                          Colors.white,
-                                                      radius: 25,
-                                                      backgroundImage:
-                                                          NetworkImage(
-                                                        bookController
-                                                            .selectedBook!
-                                                            .comments[bookController
-                                                                .selectedBook!
-                                                                .comments
-                                                                .indexWhere((comment) =>
-                                                                    comment
-                                                                        .userId ==
-                                                                    authController
-                                                                        .userModel
-                                                                        .value!
-                                                                        .uid)]
-                                                            .userImageUrl,
-                                                      ),
-                                                    ),
-                                                    const SizedBox(width: 12),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        const TextWidget(
-                                                          text: 'Publish By',
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                        TextWidget(
-                                                          text:
-                                                              'Publish Date: ${DateFormat('dd.MM.yyyy').format(bookController.selectedBook!.comments[bookController.selectedBook!.comments.indexWhere((comment) => comment.userId != authController.userModel.value!.uid)].createdAt)}',
-                                                          fontSize: 10,
-                                                        ),
-                                                        RatingBarIndicator(
-                                                          rating: bookController
-                                                              .selectedBook!
-                                                              .comments[bookController
-                                                                  .selectedBook!
-                                                                  .comments
-                                                                  .indexWhere((comment) =>
-                                                                      comment
-                                                                          .userId ==
-                                                                      authController
-                                                                          .userModel
-                                                                          .value!
-                                                                          .uid)]
-                                                              .ratingValue,
-                                                          itemBuilder: (context,
-                                                                  index) =>
-                                                              const Icon(
-                                                            Icons.star,
-                                                            color: Colors.amber,
-                                                          ),
-                                                          itemCount: 5,
-                                                          itemSize: 20.0,
-                                                          unratedColor: Colors
-                                                              .grey.shade300,
-                                                          direction:
-                                                              Axis.horizontal,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ]),
-                                                  const SizedBox(height: 8),
-                                                  TextWidget(
-                                                    text: bookController
-                                                        .selectedBook!
-                                                        .comments[bookController
-                                                            .selectedBook!
-                                                            .comments
-                                                            .indexWhere(
-                                                      (comment) =>
-                                                          comment.userId ==
-                                                          authController
-                                                              .userModel
-                                                              .value!
-                                                              .uid,
-                                                    )]
-                                                        .commentText,
-                                                    fontSize: 10,
-                                                    textAlign:
-                                                        TextAlign.justify,
-                                                    maxLines: 7,
-                                                    isHaveOverflow: true,
-                                                    color: Colors.black54,
-                                                  ),
-                                                ]),
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        top: -12,
-                                        right: 18,
-                                        child: Row(children: [
-                                          ButtonWidget(
-                                            borderRadius: 20,
-                                            paddingHorizontal: 6,
-                                            paddingVertical: 6,
-                                            onTap: () {
-                                              showModalBottomSheet(
-                                                context: context,
-                                                isScrollControlled: true,
-                                                enableDrag: false,
-                                                builder: (context) {
-                                                  return AddCommentAndRateWidget(
-                                                      itIsEdit: true,
-                                                      index: bookController
-                                                          .selectedBook!
-                                                          .comments
-                                                          .indexWhere(
-                                                        (comment) =>
-                                                            comment.userId ==
-                                                            authController
-                                                                .userModel
-                                                                .value!
-                                                                .uid,
-                                                      ));
-                                                },
-                                              );
-                                            },
-                                            height: 0,
-                                            width: 0,
-                                            color: AppColors.greenAccent,
-                                            child: const Icon(Icons.edit,
-                                                color: Colors.white, size: 18),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          ButtonWidget(
-                                            onTap: () {
-                                              commentController.deleteComment(
-                                                bookId: bookController
-                                                    .selectedBook!.id,
-                                                index: bookController
-                                                    .selectedBook!.comments
-                                                    .indexWhere(
-                                                  (comment) =>
-                                                      comment.userId ==
-                                                      authController
-                                                          .userModel.value!.uid,
-                                                ),
-                                              );
-                                            },
-                                            borderRadius: 20,
-                                            paddingHorizontal: 6,
-                                            paddingVertical: 6,
-                                            height: 0,
-                                            width: 0,
-                                            color: AppColors.redAccent,
-                                            child: const Icon(Icons.delete,
-                                                color: Colors.white, size: 18),
-                                          )
-                                        ]),
-                                      )
-                                    ],
-                                  ),
+                                  );
+                                },
+                                height: 0.05,
+                                width: 1,
+                                color: AppColors.greenAccent,
+                                text: 'Add Review',
+                                fontSize: 16,
+                              ),
                         SizedBox(height: context.height * 0.02),
                         SizedBox(
-                          height: context.height * 0.25,
+                          height: context.height * 0.27,
                           width: context.width * 1,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
-                            padding: EdgeInsets.zero,
                             itemCount:
                                 bookController.selectedBook!.comments.length,
                             itemBuilder: (BuildContext context, int index) {
@@ -458,7 +266,8 @@ class BookDetailsView extends StatelessWidget {
                                   height: 0.25,
                                   width: 0.55,
                                   child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                                    padding: const EdgeInsets.only(
+                                        left: 8, right: 8, top: 8, bottom: 4),
                                     child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
@@ -491,7 +300,7 @@ class BookDetailsView extends StatelessWidget {
                                                   ),
                                                   TextWidget(
                                                     text:
-                                                        'Publish Date: ${DateFormat('dd.MM.yyyy').format(bookController.selectedBook!.comments[index].createdAt)}',
+                                                        '${bookController.selectedBook!.comments[index].userId == authController.userModel.value!.uid ? 'You' : bookController.selectedBook!.comments[index].userName} Publish Date: ${DateFormat('dd.MM.yyyy').format(bookController.selectedBook!.comments[index].createdAt)}',
                                                     fontSize: 10,
                                                   ),
                                                 ]),
@@ -527,6 +336,72 @@ class BookDetailsView extends StatelessWidget {
                                                 true, // للتأكد من التفاف النص
                                             color: Colors.black54,
                                           ),
+                                          const Spacer(),
+                                          bookController.selectedBook!
+                                                      .comments[index].userId ==
+                                                  authController
+                                                      .userModel.value!.uid
+                                              ? Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                      ButtonWidget(
+                                                        borderRadius: 6,
+                                                        paddingHorizontal: 36,
+                                                        paddingVertical: 6,
+                                                        onTap: () {
+                                                          showModalBottomSheet(
+                                                            context: context,
+                                                            isScrollControlled:
+                                                                true,
+                                                            enableDrag: false,
+                                                            builder: (context) {
+                                                              return AddCommentAndRateWidget(
+                                                                  itIsEdit:
+                                                                      true,
+                                                                  index: index);
+                                                            },
+                                                          );
+                                                        },
+                                                        height: 0,
+                                                        width: 0,
+                                                        color: AppColors
+                                                            .greenAccent,
+                                                        child: const Icon(
+                                                            Icons.edit,
+                                                            color: Colors.white,
+                                                            size: 18),
+                                                      ),
+                                                      const SizedBox(width: 8),
+                                                      ButtonWidget(
+                                                        onTap: () async {
+                                                          commentController
+                                                              .deleteComment(
+                                                                  bookId: bookController
+                                                                      .selectedBook!
+                                                                      .id,
+                                                                  index: index);
+                                                          await bookController
+                                                              .loadBookById(
+                                                                  bookController
+                                                                      .selectedBook!
+                                                                      .id);
+                                                        },
+                                                        borderRadius: 4,
+                                                        paddingHorizontal: 36,
+                                                        paddingVertical: 6,
+                                                        height: 0,
+                                                        width: 0,
+                                                        color:
+                                                            AppColors.redAccent,
+                                                        child: const Icon(
+                                                            Icons.delete,
+                                                            color: Colors.white,
+                                                            size: 18),
+                                                      )
+                                                    ])
+                                              : const SizedBox(),
                                         ]),
                                   ),
                                 ),

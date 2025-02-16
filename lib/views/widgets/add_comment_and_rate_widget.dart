@@ -47,7 +47,8 @@ class _AddCommentAndRateWidgetState extends State<AddCommentAndRateWidget> {
         bottomSheetHeight = isKeyboardVisible ? 0.7 : 0.4;
         textCommentController = widget.itIsEdit == true
             ? TextEditingController(
-                text: commentController.userComment.value!.commentText)
+                text: bookController
+                    .selectedBook!.comments[widget.index!].commentText)
             : TextEditingController(text: textCommentController.text);
       });
     }
@@ -85,7 +86,8 @@ class _AddCommentAndRateWidgetState extends State<AddCommentAndRateWidget> {
               children: [
                 RatingBar.builder(
                   initialRating: widget.itIsEdit == true
-                      ? commentController.userComment.value!.ratingValue
+                      ? bookController
+                          .selectedBook!.comments[widget.index!].ratingValue
                       : 3,
                   minRating: 1,
                   direction: Axis.horizontal,
@@ -102,7 +104,8 @@ class _AddCommentAndRateWidgetState extends State<AddCommentAndRateWidget> {
                     ratingNotifier.value = rating;
                     // تحديث التقييم في الكومنت، لو كانت في وضع التعديل
                     if (widget.itIsEdit == true) {
-                      commentController.userComment.value!.ratingValue = rating;
+                      bookController.selectedBook!.comments[widget.index!]
+                          .ratingValue = rating;
                     }
                   },
                 ),
@@ -112,7 +115,7 @@ class _AddCommentAndRateWidgetState extends State<AddCommentAndRateWidget> {
                   builder: (context, rating, _) {
                     return TextWidget(
                       text: widget.itIsEdit == true
-                          ? 'Rate: ${commentController.userComment.value!.ratingValue.toString()}'
+                          ? 'Rate: ${bookController.selectedBook!.comments[widget.index!].ratingValue.toString()}'
                           : 'Rate: (${rating.toString()})',
                       fontSize: 16,
                       color: Colors.black,
@@ -126,7 +129,8 @@ class _AddCommentAndRateWidgetState extends State<AddCommentAndRateWidget> {
             TextFieldWidget(
               controller: textCommentController,
               hint: widget.itIsEdit == true
-                  ? commentController.userComment.value!.commentText
+                  ? bookController
+                      .selectedBook!.comments[widget.index!].commentText
                   : 'Enter your comment',
               maxLines: 4,
               borderRadius: 12,
@@ -140,19 +144,22 @@ class _AddCommentAndRateWidgetState extends State<AddCommentAndRateWidget> {
             ButtonWidget(
                 paddingHorizontal: 12,
                 paddingVertical: 8,
-                onTap: () {
+                onTap: () async {
                   if (widget.itIsEdit == false) {
                     commentController.addComment(
+                        userId: authController.userModel.value!.uid,
                         bookId: bookController.selectedBook!.id,
                         comment: CommentModel(
                           commentText: textCommentController.text,
                           userId: authController.userModel.value!.uid,
                           userName: bookController.selectedBook!.publisherName,
-                          ratingValue: ratingNotifier.value,
+                          ratingValue: ratingNotifier.value.toDouble(),
                           userImageUrl:
                               bookController.selectedBook!.publisherImageUrl,
                           createdAt: DateTime.now(),
                         ));
+                    await bookController
+                        .loadBookById(bookController.selectedBook!.id);
                   } else {
                     commentController.editComment(
                         bookId: bookController.selectedBook!.id,
@@ -161,12 +168,15 @@ class _AddCommentAndRateWidgetState extends State<AddCommentAndRateWidget> {
                           commentText: textCommentController.text,
                           userId: authController.userModel.value!.uid,
                           userName: bookController.selectedBook!.publisherName,
-                          ratingValue: ratingNotifier.value,
+                          ratingValue: ratingNotifier.value.toDouble(),
                           userImageUrl:
                               bookController.selectedBook!.publisherImageUrl,
                           createdAt: DateTime.now(),
                         ));
+                    await bookController
+                        .loadBookById(bookController.selectedBook!.id);
                   }
+
                   FocusScope.of(context).unfocus();
                 },
                 text: 'Send',

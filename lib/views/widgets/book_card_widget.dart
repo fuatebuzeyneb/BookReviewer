@@ -100,12 +100,12 @@ class bookCardWidget extends StatelessWidget {
                         Column(children: [
                           ButtonWidget(
                             onTap: () {
-                              Get.find<CommentController>().fetchUserComment(
-                                  bookId: books[index].id,
-                                  userId: Get.find<AuthController>()
-                                      .userModel
-                                      .value!
-                                      .uid);
+                              // Get.find<CommentController>().fetchUserComment(
+                              //     bookId: books[index].id,
+                              //     userId: Get.find<AuthController>()
+                              //         .userModel
+                              //         .value!
+                              //         .uid);
                               Get.find<BookController>()
                                   .loadBookById(books[index].id);
                               Get.toNamed(Routes.bookDetailsView);
