@@ -11,6 +11,8 @@ class AllBooksView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.loadBooks();
+    print(controller.books.length);
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(

@@ -156,7 +156,11 @@ class HomeView extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
                 GestureDetector(
-                  onTap: () => Get.toNamed(Routes.allBooksView),
+                  onTap: () async {
+                    Get.toNamed(Routes.allBooksView);
+
+                    // تحميل الكتب عند تهيئة الـ Controller
+                  },
                   child: const TextWidget(
                     text: 'See All',
                     fontSize: 14,
@@ -166,7 +170,7 @@ class HomeView extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 4),
-            latestBooksWidget(books: bookController.books),
+            latestBooksWidget(books: bookController.laterBooks),
           ],
         ),
       ),

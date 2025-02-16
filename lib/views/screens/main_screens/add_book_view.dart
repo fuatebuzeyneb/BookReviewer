@@ -125,8 +125,9 @@ class AddBookView extends StatelessWidget {
                             userId: bookController
                                 .userBooks[Get.arguments['index']]
                                 .userId, // سيتم تعبئته في BookService
-                            rating: Random().nextDouble() * (5.0 - 2.0) +
-                                2.0, // تقييم افتراضي
+                            rating: bookController
+                                .userBooks[Get.arguments['index']]
+                                .rating, // تقييم افتراضي
                             comments: bookController
                                 .userBooks[Get.arguments['index']]
                                 .comments, // قائمة تعليقات فارغة

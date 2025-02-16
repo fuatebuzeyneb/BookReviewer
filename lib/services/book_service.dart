@@ -94,11 +94,12 @@ class BookService {
           title: updatedBook.title,
           author: updatedBook.author,
           description: updatedBook.description,
-          coverImageUrl: imageUrl!, // حفظ الرابط هنا
+          coverImageUrl:
+              imageUrl ?? updatedBook.coverImageUrl, // حفظ الرابط هنا
           userId: updatedBook.userId,
           rating: updatedBook.rating, // إضافة التقييم
           comments: updatedBook.comments, // إضافة التعليقات (إن وجدت)
-          createdAt: DateTime.now(),
+          createdAt: updatedBook.createdAt,
           publisherName: updatedBook.publisherName,
           publisherImageUrl: updatedBook.publisherImageUrl);
       // تحديث الكتاب في مجموعة "books"
@@ -112,12 +113,30 @@ class BookService {
     }
   }
 
+  Future<List<BookModel>> fetchLatestBooks({int limit = 6}) async {
+    try {
+      Query query = _firestore
+          .collection('books')
+          .orderBy('createdAt',
+              descending: true) // ترتيب حسب التاريخ من الأحدث إلى الأقدم
+          .limit(limit);
+
+      QuerySnapshot querySnapshot = await query.get();
+
+      return querySnapshot.docs.map((doc) {
+        return BookModel.fromJson(doc.data() as Map<String, dynamic>);
+      }).toList();
+    } catch (e) {
+      print("❌ حدث خطأ أثناء جلب أحدث الكتب: $e");
+      return [];
+    }
+  }
+
   Future<List<BookModel>> fetchBooks({int limit = 8}) async {
     try {
       Query query = _firestore
           .collection('books')
-          .orderBy('createdAt', descending: true) // 🔹 فرز من الأحدث إلى الأقدم
-          .limit(limit);
+          .limit(limit); // فقط تحديد العدد دون ترتيب حسب التاريخ
 
       if (lastDocument != null) {
         query = query.startAfterDocument(lastDocument!);
@@ -146,15 +165,7 @@ class BookService {
               descending: true) // 🔹 ترتيب الكتب من الأعلى تقييمًا إلى الأقل
           .limit(limit);
 
-      if (lastDocument != null) {
-        query = query.startAfterDocument(lastDocument!);
-      }
-
       QuerySnapshot querySnapshot = await query.get();
-
-      if (querySnapshot.docs.isNotEmpty) {
-        lastDocument = querySnapshot.docs.last;
-      }
 
       List<BookModel> books = querySnapshot.docs.map((doc) {
         return BookModel.fromJson(doc.data() as Map<String, dynamic>);

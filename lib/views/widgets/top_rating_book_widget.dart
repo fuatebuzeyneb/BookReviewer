@@ -14,6 +14,7 @@ class TopRatingBooksWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
+      // استخدام Obx لتحديث واجهة المستخدم عند تغيير books
       return SizedBox(
         height: context.height * 0.24,
         width: context.width * 1,
@@ -31,8 +32,7 @@ class TopRatingBooksWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   image: DecorationImage(
                     image: NetworkImage(books[index].coverImageUrl),
-                    fit: BoxFit
-                        .cover, // يمكن استخدام BoxFit.cover أو BoxFit.fill حسب الحاجة
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),

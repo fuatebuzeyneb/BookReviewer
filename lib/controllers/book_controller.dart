@@ -13,6 +13,7 @@ class BookController extends GetxController {
   final ScrollController scrollController = ScrollController();
 
   RxList<BookModel> books = <BookModel>[].obs; // قائمة الكتب العامة
+  RxList<BookModel> laterBooks = <BookModel>[].obs;
   RxList<BookModel> ratingBooks = <BookModel>[].obs; // قائمة الكتب العامة
   RxList<BookModel> userBooks = <BookModel>[].obs; // قائمة كتب المستخدم
   BookModel? selectedBook;
@@ -20,12 +21,13 @@ class BookController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    loadBooks(); // تحميل الكتب عند تهيئة الـ Controller
-    scrollController.addListener(_onScroll);
     loadRatingBooks();
+    getLatestBooks();
+    // loadBooks();
+    scrollController.addListener(onScroll);
   }
 
-  void _onScroll() async {
+  void onScroll() async {
     if (scrollController.position.pixels >=
         scrollController.position.maxScrollExtent - 100) {
       if (isLoading.value) return; // تجنب تكرار التحميل
@@ -72,6 +74,10 @@ class BookController extends GetxController {
     }
   }
 
+  Future<void> getLatestBooks() async {
+    laterBooks.value = await _bookService.fetchLatestBooks();
+  }
+
   // إضافة كتاب جديد
   Future<void> addBook(
       {required String title,
@@ -96,6 +102,9 @@ class BookController extends GetxController {
           publisherImageUrl: publisherImageUrl);
 
       await _bookService.addBook(book, pickedImage.value!);
+      await loadRatingBooks();
+      await getLatestBooks();
+      await loadUserBooks(book.userId);
       Get.snackbar('نجاح', 'تمت إضافة الكتاب بنجاح!');
 
       isLoading.value = false;
@@ -105,12 +114,15 @@ class BookController extends GetxController {
     }
   }
 
-  Future<void> deleteBook(String bookId) async {
+  Future<void> deleteBook(String bookId, String userId) async {
     try {
       isLoading.value = true;
 
       // استخدام BookService لحذف الكتاب
       await _bookService.deleteBook(bookId);
+      await loadRatingBooks();
+      await getLatestBooks();
+      await loadUserBooks(userId);
       Get.snackbar('نجاح', 'تم حذف الكتاب بنجاح!');
 
       isLoading.value = false;
@@ -127,13 +139,19 @@ class BookController extends GetxController {
       isLoading.value = true;
 
       // إرسال التعديل إلى BookService
-      await _bookService.editBook(updatedBook, pickedImage.value!);
+      await _bookService.editBook(
+          updatedBook, pickedImage.value ?? File(updatedBook.coverImageUrl));
+
+      await loadRatingBooks();
+      await getLatestBooks();
+      await loadUserBooks(updatedBook.userId);
       Get.snackbar('نجاح', 'تم تعديل الكتاب بنجاح!');
 
       isLoading.value = false;
     } catch (e) {
       isLoading.value = false;
       Get.snackbar('خطأ', 'حدث خطأ أثناء تعديل الكتاب: $e');
+      print(e);
     }
   }
 
