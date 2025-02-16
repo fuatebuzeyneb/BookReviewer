@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:book_reviewer/models/user_model.dart';
 import 'package:book_reviewer/routes/routes.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_storage/get_storage.dart';
@@ -85,5 +84,18 @@ class AuthController extends GetxController {
     box.remove('userData');
 
     Get.offAllNamed(Routes.signin);
+  }
+
+  Future<void> signInWithGoogle() async {
+    try {
+      isLoading.value = true;
+      UserCredential? userCredential = await _authService.signInWithGoogle();
+      if (userCredential != null) {
+        loadUserData();
+        Get.offNamed(Routes.bottomNav);
+      }
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

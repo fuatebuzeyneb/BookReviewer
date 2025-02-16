@@ -67,7 +67,7 @@ class SigninView extends StatelessWidget {
                           borderRadius: BorderRadius.circular(25),
                           color: Colors.white),
                       padding: const EdgeInsets.all(20),
-                      height: context.height * 0.43,
+                      height: context.height * 0.45,
                       width: context.width * 0.9,
                       child: Column(
                         children: [
@@ -93,6 +93,8 @@ class SigninView extends StatelessWidget {
                           ),
                           SizedBox(height: context.height * 0.02),
                           ButtonWidget(
+                            boxShadowOpacity: 0.3,
+                            showElevation: true,
                             width: context.width * 1,
                             color: AppColors.redAccent,
                             borderRadius: 6,
@@ -111,59 +113,34 @@ class SigninView extends StatelessWidget {
                               }
                             },
                           ),
-                          SizedBox(height: context.height * 0.02),
-                          Row(
-                            children: [
-                              const Expanded(
-                                child: Divider(
-                                  color: Colors.grey,
-                                  height: 20,
-                                  thickness: 1,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 6,
-                              ),
-                              ButtonWidget(
-                                width: 0,
-                                height: 0,
-                                color: Colors.white,
-                                borderRadius: 6,
-                                onTap: () {},
-                                child: Image.asset(
-                                  'assets/icons/facebook.png',
-                                  height: 21,
-                                  width: 21,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 6,
-                              ),
-                              ButtonWidget(
-                                width: 0,
-                                height: 0,
-                                color: Colors.white,
-                                borderRadius: 6,
-                                onTap: () {},
-                                child: Image.asset(
-                                  'assets/icons/google.png',
-                                  height: 20,
-                                  width: 20,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 6,
-                              ),
-                              const Expanded(
-                                child: Divider(
-                                  color: Colors.grey,
-                                  height: 20,
-                                  thickness: 1,
-                                ),
-                              ),
-                            ],
+                          SizedBox(height: context.height * 0.01),
+                          ButtonWidget(
+                            boxShadowOpacity: 0.3,
+                            showElevation: true,
+                            width: context.width * 1,
+                            color: Colors.white,
+                            borderRadius: 6,
+                            onTap: () {
+                              authController.signInWithGoogle();
+                            },
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/icons/google.png',
+                                    height: 24,
+                                    width: 24,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  const TextWidget(
+                                    text: 'Sign In with Google',
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ]),
                           ),
-                          SizedBox(height: context.height * 0.02),
+                          SizedBox(height: context.height * 0.03),
                           GestureDetector(
                             onTap: () {
                               Get.toNamed(Routes.signup);

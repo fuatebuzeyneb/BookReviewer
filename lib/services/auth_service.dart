@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 
 import '../models/user_model.dart';
@@ -13,6 +14,7 @@ class AuthService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final box = GetStorage();
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   Future<String?> uploadImage(File imageFile, String userId) async {
     try {
@@ -129,5 +131,39 @@ class AuthService {
         saveUserData(userModel);
       }
     } catch (e) {}
+  }
+
+  Future<UserCredential?> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) return null;
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      UserCredential userCredential =
+          await _auth.signInWithCredential(credential);
+      User? user = userCredential.user;
+
+      if (user != null) {
+        UserModel newUser = UserModel(
+          uid: user.uid,
+          fullName: user.displayName ?? '',
+          email: user.email ?? '',
+          profilePicture: user.photoURL ?? '',
+          createdAt: DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()),
+        );
+        await saveUserToFirestore(newUser);
+        await saveUserData(newUser);
+      }
+      return userCredential;
+    } catch (e) {
+      print("Error signing in with Google: $e");
+      return null;
+    }
   }
 }

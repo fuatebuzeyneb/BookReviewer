@@ -103,6 +103,8 @@ class SignupView extends StatelessWidget {
                           ),
                           SizedBox(height: context.height * 0.02),
                           ButtonWidget(
+                            boxShadowOpacity: 0.3,
+                            showElevation: true,
                             width: context.width * 1,
                             color: AppColors.redAccent,
                             borderRadius: 6,
@@ -147,22 +149,9 @@ class SignupView extends StatelessWidget {
                                 height: 0,
                                 color: Colors.white,
                                 borderRadius: 6,
-                                onTap: () {},
-                                child: Image.asset(
-                                  'assets/icons/facebook.png',
-                                  height: 21,
-                                  width: 21,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 6,
-                              ),
-                              ButtonWidget(
-                                width: 0,
-                                height: 0,
-                                color: Colors.white,
-                                borderRadius: 6,
-                                onTap: () {},
+                                onTap: () {
+                                  authController.signInWithGoogle();
+                                },
                                 child: Image.asset(
                                   'assets/icons/google.png',
                                   height: 20,
