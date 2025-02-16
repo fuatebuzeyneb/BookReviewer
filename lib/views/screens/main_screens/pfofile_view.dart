@@ -40,9 +40,10 @@ class ProfileView extends StatelessWidget {
             children: [
               CircleAvatar(
                 backgroundColor: AppColors.yellow,
-                radius: 55, // نصف قطر الدائرة
+                radius: 55,
                 child: CircleAvatar(
-                    radius: 50, // نصف قطر الدائرة
+                    backgroundColor: Colors.grey[100],
+                    radius: 50,
                     backgroundImage: NetworkImage(
                       _authController.userModel.value!.profilePicture!,
                     )),

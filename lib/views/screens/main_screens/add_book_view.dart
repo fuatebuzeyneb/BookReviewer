@@ -26,11 +26,8 @@ class AddBookView extends StatelessWidget {
   final TextEditingController descriptionController = TextEditingController();
   final BookController bookController = Get.find<BookController>();
 
-  // استلام الـ index من Get.arguments
-
   @override
   Widget build(BuildContext context) {
-    // إذا كانت في وضع التعديل، قم بتحديث المتحكمات
     if (itIsEdit == true) {
       int index = Get.arguments['index'];
       bookNameController.text = bookController.userBooks[index].title;
@@ -123,22 +120,19 @@ class AddBookView extends StatelessWidget {
                             coverImageUrl:
                                 bookController.pickedImage.value.toString(),
                             userId: bookController
-                                .userBooks[Get.arguments['index']]
-                                .userId, // سيتم تعبئته في BookService
+                                .userBooks[Get.arguments['index']].userId,
                             rating: bookController
-                                .userBooks[Get.arguments['index']]
-                                .rating, // تقييم افتراضي
+                                .userBooks[Get.arguments['index']].rating,
                             comments: bookController
-                                .userBooks[Get.arguments['index']]
-                                .comments, // قائمة تعليقات فارغة
+                                .userBooks[Get.arguments['index']].comments,
                             createdAt: bookController
                                 .userBooks[Get.arguments['index']].createdAt,
                             publisherName: bookController
                                 .userBooks[Get.arguments['index']]
-                                .publisherName, // هذه القيمة ستظل ثابتة ولا تتغير
+                                .publisherName,
                             publisherImageUrl: bookController
                                 .userBooks[Get.arguments['index']]
-                                .publisherImageUrl, // هذه القيمة ستظل ثابتة ولا تتغير
+                                .publisherImageUrl,
                           ));
                         }
                       },

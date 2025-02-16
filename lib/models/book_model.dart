@@ -9,7 +9,7 @@ class BookModel {
   final String publisherImageUrl;
   final String userId;
   final double rating;
-  final List<CommentModel> comments; // قائمة التعليقات
+  final List<CommentModel> comments;
   final DateTime createdAt;
   final String publisherName;
 
@@ -20,13 +20,12 @@ class BookModel {
       required this.description,
       required this.coverImageUrl,
       required this.userId,
-      required this.rating, // التقييم الافتراضي 0
-      required this.comments, // قائمة التعليقات الافتراضية فارغة
+      required this.rating,
+      required this.comments,
       required this.createdAt,
       required this.publisherName,
       required this.publisherImageUrl});
 
-  // تحويل بيانات الكتاب إلى صيغة JSON لتخزينها في Firestore
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -43,7 +42,6 @@ class BookModel {
     };
   }
 
-  // إنشاء موديل من بيانات Firestore
   factory BookModel.fromJson(Map<String, dynamic> json) {
     return BookModel(
       id: json['id'],

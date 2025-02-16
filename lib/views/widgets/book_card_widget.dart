@@ -48,7 +48,6 @@ class bookCardWidget extends StatelessWidget {
               ),
               SizedBox(width: context.width * 0.03),
               Expanded(
-                // تأكد من أن النص يتمدد ويأخذ المساحة المتاحة
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,

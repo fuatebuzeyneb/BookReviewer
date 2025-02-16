@@ -51,11 +51,10 @@ class ButtonWidget extends StatelessWidget {
                 ? []
                 : [
                     BoxShadow(
-                      color: Colors.black
-                          .withOpacity(boxShadowOpacity!), // لون الظل
-                      spreadRadius: 1, // مدى انتشار الظل
-                      blurRadius: 1, // مقدار الضبابية
-                      offset: const Offset(0, 2), // إزاحة الظل (x, y)
+                      color: Colors.black.withOpacity(boxShadowOpacity!),
+                      spreadRadius: 1,
+                      blurRadius: 1,
+                      offset: const Offset(0, 2),
                     ),
                   ],
             borderRadius: BorderRadius.circular(borderRadius),

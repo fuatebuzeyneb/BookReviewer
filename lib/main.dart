@@ -1,12 +1,10 @@
 import 'package:book_reviewer/controllers/auth_controller.dart';
 import 'package:book_reviewer/controllers/book_controller.dart';
 import 'package:book_reviewer/controllers/comment_controller.dart';
-import 'package:book_reviewer/views/screens/main_screens/home_view.dart';
+
 import 'package:book_reviewer/routes/app_pages.dart';
 import 'package:book_reviewer/routes/routes.dart';
-import 'package:book_reviewer/views/screens/auth_screens/sign_in_view.dart';
-import 'package:book_reviewer/views/screens/auth_screens/sign_up_view.dart';
-import 'package:book_reviewer/views/screens/other_screens/splash_view.dart';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
@@ -22,32 +20,18 @@ void main() async {
   Get.put(BookController());
   Get.put(CommentController());
 
-// التأكد من تحميل البيانات
-
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: Routes
-          .splash, // إذا كانت بيانات المستخدم غير موجودة (غير مسجل الدخول)
+      initialRoute: Routes.splash,
       getPages: AppPages.pages,
     );
   }
 }
-
-
-/*
-
-Get.find<AuthController>().userModel.value == null
-          ? Routes
-              .signin // إذا كانت بيانات المستخدم غير موجودة (غير مسجل الدخول)
-          : Routes.bottomNav,
-
-*/

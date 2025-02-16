@@ -38,10 +38,8 @@ class _AddCommentAndRateWidgetState extends State<AddCommentAndRateWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // استخدام MediaQuery بدلاً من KeyboardVisibilityBuilder
     final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
 
-    // تحديث ارتفاع الـ BottomSheet بناءً على حالة لوحة المفاتيح
     if (isKeyboardVisible != (bottomSheetHeight > 0.4)) {
       setState(() {
         bottomSheetHeight = isKeyboardVisible ? 0.7 : 0.4;
@@ -100,9 +98,8 @@ class _AddCommentAndRateWidgetState extends State<AddCommentAndRateWidget> {
                     color: Colors.amber,
                   ),
                   onRatingUpdate: (rating) {
-                    // عند تغيير التقييم من المستخدم
                     ratingNotifier.value = rating;
-                    // تحديث التقييم في الكومنت، لو كانت في وضع التعديل
+
                     if (widget.itIsEdit == true) {
                       bookController.selectedBook!.comments[widget.index!]
                           .ratingValue = rating;

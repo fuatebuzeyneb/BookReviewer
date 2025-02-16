@@ -37,99 +37,6 @@ class HomeView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Stack(
-            //   children: [
-            //     ButtonWidget(
-            //       showElevation: true,
-            //       borderRadius: 12,
-            //       height: 0.18,
-            //       width: 1,
-            //       color: Colors.white,
-            //       onTap: () {},
-            //       child: Padding(
-            //         padding:
-            //             const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            //         child: Row(
-            //           mainAxisAlignment: MainAxisAlignment.start,
-            //           children: [
-            //             Image.asset(
-            //               'assets/images/test_book.jpg',
-            //               height: context.height * 0.2,
-            //               width: context.width * 0.2,
-            //             ),
-            //             SizedBox(width: context.width * 0.05),
-            //             Expanded(
-            //               // تأكد من أن النص يتمدد ويأخذ المساحة المتاحة
-            //               child: Column(
-            //                 mainAxisAlignment: MainAxisAlignment.center,
-            //                 crossAxisAlignment: CrossAxisAlignment.start,
-            //                 children: [
-            //                   const TextWidget(
-            //                     text: 'fdgdf fgdfg',
-            //                     fontSize: 18,
-            //                     fontWeight: FontWeight.bold,
-            //                   ),
-            //                   const SizedBox(height: 2),
-            //                   const TextWidget(
-            //                     text:
-            //                         'This is a long text that will wrap into multiple lines depending on the width of the screen or container.',
-            //                     fontSize: 12,
-            //                     textAlign: TextAlign.left,
-            //                     maxLines: 3, // عرض النص على 3 أسطر كحد أقصى
-            //                     isHaveOverflow: true, // للتأكد من التفاف النص
-            //                   ),
-            //                   const SizedBox(height: 2),
-            //                   Row(
-            //                     children: [
-            //                       ButtonWidget(
-            //                         onTap: () {},
-            //                         text: 'dsfsd fsdf',
-            //                         fontSize: 14,
-            //                         color: AppColors.redAccent,
-            //                         colorText: Colors.white,
-            //                         borderRadius: 6,
-            //                         paddingHorizontal: 25,
-            //                         paddingVertical: 8,
-            //                         height: 0,
-            //                         width: 0,
-            //                       ),
-            //                       const SizedBox(width: 6),
-            //                       ButtonWidget(
-            //                         onTap: () {},
-            //                         text: 'dsfsd fsdf',
-            //                         fontSize: 14,
-            //                         colorText: Colors.black,
-            //                         borderRadius: 20,
-            //                         paddingHorizontal: 20,
-            //                         paddingVertical: 10,
-            //                         height: 0,
-            //                         width: 0,
-            //                       )
-            //                     ],
-            //                   )
-            //                 ],
-            //               ),
-            //             ),
-            //           ],
-            //         ),
-            //       ),
-            //     ),
-            //     Positioned(
-            //         top: 10,
-            //         right: 10,
-            //         child: Row(
-            //           children: [
-            //             TextWidget(
-            //               text: 'Top Rating (4.8)',
-            //               fontSize: 12,
-            //               fontWeight: FontWeight.bold,
-            //               color: AppColors.redAccent,
-            //             ),
-            //           ],
-            //         )),
-            //   ],
-            // ),
-            // const SizedBox(height: 8),
             const Row(
               children: [
                 TextWidget(
@@ -158,8 +65,6 @@ class HomeView extends StatelessWidget {
                 GestureDetector(
                   onTap: () async {
                     Get.toNamed(Routes.allBooksView);
-
-                    // تحميل الكتب عند تهيئة الـ Controller
                   },
                   child: const TextWidget(
                     text: 'See All',

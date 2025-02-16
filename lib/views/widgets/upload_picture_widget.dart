@@ -6,7 +6,7 @@ import 'package:book_reviewer/themes/app_colors.dart';
 import 'package:book_reviewer/views/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart'; // لاستيراد مكتبة اختيار الصورة
+import 'package:image_picker/image_picker.dart';
 
 class UploadPictureWidget extends StatefulWidget {
   final String? imageUrl;
@@ -19,18 +19,17 @@ class UploadPictureWidget extends StatefulWidget {
 }
 
 class _UploadPictureWidgetState extends State<UploadPictureWidget> {
-  String? _imagePath; // متغير لتخزين رابط الصورة
+  String? _imagePath;
 
   final ImagePicker _picker = ImagePicker();
 
-  // فتح المعرض لاختيار صورة
   Future<void> _pickImage() async {
     final XFile? pickedFile =
         await _picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       setState(() {
-        _imagePath = pickedFile.path; // حفظ الرابط في المتغير
+        _imagePath = pickedFile.path;
         if (widget.witchType == 2) {
           Get.find<AuthController>().pickedImage.value = File(_imagePath!);
         } else if (widget.witchType == 1) {
@@ -42,7 +41,7 @@ class _UploadPictureWidgetState extends State<UploadPictureWidget> {
 
   void _deleteImage() {
     setState(() {
-      _imagePath = null; // إعادة تعيين المتغير ليصبح null
+      _imagePath = null;
       if (widget.witchType == 2) {
         Get.find<AuthController>().pickedImage.value = null;
       } else if (widget.witchType == 1) {
@@ -57,7 +56,7 @@ class _UploadPictureWidgetState extends State<UploadPictureWidget> {
       clipBehavior: Clip.none,
       children: [
         ButtonWidget(
-          onTap: () {}, // لا تحتاج لاستخدام هذا في الوقت الحالي
+          onTap: () {},
           width: 0.28,
           height: widget.witchType == 2 ? 0.12 : 0.18,
           color: Colors.transparent,
@@ -66,18 +65,15 @@ class _UploadPictureWidgetState extends State<UploadPictureWidget> {
           colorText: Colors.white,
           child: _imagePath != null
               ? Image.file(
-                  File(_imagePath!), // عرض الصورة التي تم اختيارها
+                  File(_imagePath!),
                   fit: BoxFit.cover,
                 )
               : widget.imageUrl != null
                   ? Image.network(
-                      widget
-                          .imageUrl!, // عرض الصورة من الإنترنت إذا تم تمرير رابط
+                      widget.imageUrl!,
                       fit: BoxFit.cover,
                     )
-                  : const Icon(Icons.image,
-                      color: Colors.grey,
-                      size: 30), // إذا لم يتم اختيار صورة بعد
+                  : const Icon(Icons.image, color: Colors.grey, size: 30),
         ),
         Positioned(
             top: -10,
@@ -85,9 +81,9 @@ class _UploadPictureWidgetState extends State<UploadPictureWidget> {
             child: ButtonWidget(
               onTap: () async {
                 if (_imagePath == null) {
-                  await _pickImage(); // عند الضغط على الزر، يفتح المعرض لاختيار الصورة
+                  await _pickImage();
                 } else {
-                  _deleteImage(); // إذا تم اختيار صورة، يتم حذفها
+                  _deleteImage();
                 }
               },
               color: AppColors.greenAccent,
@@ -95,9 +91,7 @@ class _UploadPictureWidgetState extends State<UploadPictureWidget> {
               width: 0.07,
               borderRadius: 16,
               child: Icon(
-                _imagePath == null
-                    ? Icons.camera
-                    : Icons.delete, // تغيير الأيقونة بناءً على حالة الصورة
+                _imagePath == null ? Icons.camera : Icons.delete,
                 color: Colors.black,
                 size: 20,
               ),

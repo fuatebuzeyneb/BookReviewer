@@ -61,7 +61,6 @@ class BookDetailsView extends StatelessWidget {
                               ),
                               SizedBox(width: context.width * 0.05),
                               Expanded(
-                                // تأكد من أن النص يتمدد ويأخذ المساحة المتاحة
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,10 +77,8 @@ class BookDetailsView extends StatelessWidget {
                                           .selectedBook!.description,
                                       fontSize: 12,
                                       textAlign: TextAlign.left,
-                                      maxLines:
-                                          2, // عرض النص على 3 أسطر كحد أقصى
-                                      isHaveOverflow:
-                                          true, // للتأكد من التفاف النص
+                                      maxLines: 2,
+                                      isHaveOverflow: true,
                                       color: Colors.white,
                                     ),
                                     const SizedBox(height: 2),
@@ -151,11 +148,9 @@ class BookDetailsView extends StatelessWidget {
                             child: Row(children: [
                               CircleAvatar(
                                   backgroundColor: Colors.white,
-                                  radius: 30, // نصف قطر الدائرة
+                                  radius: 30,
                                   backgroundImage: NetworkImage(bookController
-                                      .selectedBook!
-                                      .publisherImageUrl) // رابط الصورة
-                                  ),
+                                      .selectedBook!.publisherImageUrl)),
                               const SizedBox(width: 12),
                               Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -212,8 +207,8 @@ class BookDetailsView extends StatelessWidget {
                           text: bookController.selectedBook!.description,
                           fontSize: 12,
                           textAlign: TextAlign.justify,
-                          maxLines: 12, // عرض النص على 12 سطر كحد أقصى
-                          isHaveOverflow: true, // للتأكد من التفاف النص
+                          maxLines: 12,
+                          isHaveOverflow: true,
                           color: Colors.black54,
                         ),
                         SizedBox(height: context.height * 0.015),
@@ -277,13 +272,12 @@ class BookDetailsView extends StatelessWidget {
                                           Row(children: [
                                             CircleAvatar(
                                                 backgroundColor: Colors.white,
-                                                radius: 20, // نصف قطر الدائرة
+                                                radius: 20,
                                                 backgroundImage: NetworkImage(
                                                     bookController
                                                         .selectedBook!
                                                         .comments[index]
-                                                        .userImageUrl) // رابط الصورة
-                                                ),
+                                                        .userImageUrl)),
                                             const SizedBox(width: 12),
                                             Column(
                                                 crossAxisAlignment:
@@ -307,22 +301,17 @@ class BookDetailsView extends StatelessWidget {
                                           ]),
                                           const SizedBox(height: 8),
                                           RatingBarIndicator(
-                                            rating: bookController
-                                                .selectedBook!
-                                                .comments[index]
-                                                .ratingValue, // القيمة (مثلاً 3.5)
+                                            rating: bookController.selectedBook!
+                                                .comments[index].ratingValue,
                                             itemBuilder: (context, index) =>
                                                 const Icon(
                                               Icons.star,
-                                              color: Colors
-                                                  .amber, // لون النجوم الممتلئة
+                                              color: Colors.amber,
                                             ),
-                                            itemCount: 5, // عدد النجوم
-                                            itemSize: 25.0, // حجم النجمة
-                                            unratedColor: Colors.grey
-                                                .shade300, // لون النجوم الفارغة
-                                            direction: Axis
-                                                .horizontal, // عرض النجوم أفقيًا
+                                            itemCount: 5,
+                                            itemSize: 25.0,
+                                            unratedColor: Colors.grey.shade300,
+                                            direction: Axis.horizontal,
                                           ),
                                           const SizedBox(height: 10),
                                           TextWidget(
@@ -330,10 +319,8 @@ class BookDetailsView extends StatelessWidget {
                                                 .comments[index].commentText,
                                             fontSize: 10,
                                             textAlign: TextAlign.justify,
-                                            maxLines:
-                                                7, // عرض النص على 12 سطر كحد أقصى
-                                            isHaveOverflow:
-                                                true, // للتأكد من التفاف النص
+                                            maxLines: 7,
+                                            isHaveOverflow: true,
                                             color: Colors.black54,
                                           ),
                                           const Spacer(),

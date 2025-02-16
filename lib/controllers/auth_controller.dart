@@ -17,18 +17,15 @@ class AuthController extends GetxController {
   Rx<UserModel?> userModel = Rx<UserModel?>(null);
   RxBool isLoading = false.obs;
   Rx<File?> pickedImage = Rx<File?>(null);
-  final box = GetStorage(); // التخزين المحلي
+  final box = GetStorage();
 
   Future<void> loadUserData() async {
     final userData = box.read('userData');
     if (userData != null) {
       userModel.value = UserModel.fromJson(userData);
       print("Loaded user data: $userData");
-      // هنا يمكنك توجيه المستخدم مباشرة بعد تحميل البيانات
-      //Get.offNamed(Routes.bottomNav); // الانتقال إلى الصفحة الرئيسية
     } else {
       print("No user data found in local storage");
-      //  Get.offNamed(Routes.signin); // الانتقال إلى صفحة تسجيل الدخول
     }
   }
 
@@ -48,19 +45,18 @@ class AuthController extends GetxController {
         createdAt: DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()),
       );
 
-      User? user = await _authService.signUp(
-          userModel, password, pickedImage.value); // رفع الصورة وتسجيل المستخدم
+      User? user =
+          await _authService.signUp(userModel, password, pickedImage.value);
       if (user != null) {
         print("User signed up successfully with image: ${user.uid}");
 
-        // await getUserDataFromFirebase(user.uid);
         loadUserData();
         Get.offNamed(Routes.bottomNav);
       } else {
         print("Error signing up user");
       }
     } finally {
-      isLoading.value = false; // إنهاء التحميل
+      isLoading.value = false;
     }
   }
 
@@ -69,9 +65,7 @@ class AuthController extends GetxController {
       isLoading.value = true;
       User? user = await _authService.signIn(email, password);
       if (user != null) {
-        // await getUserDataFromFirebase(
-        //     user.uid); // تحميل بيانات المستخدم من Firebase
-        loadUserData(); // تحميل البيانات من التخزين المحلي بعد التحديث
+        loadUserData();
         Get.offNamed(Routes.bottomNav);
       } else {
         print("Error signing in user");
@@ -83,14 +77,13 @@ class AuthController extends GetxController {
 
   Future<void> saveUserData(UserModel user) async {
     await box.write('userData', user.toJson());
-    print(
-        "User data saved locally: ${user.toJson()}"); // للتأكد من تخزين البيانات
+    print("User data saved locally: ${user.toJson()}");
   }
 
   Future<void> signOut() async {
-    await _authService.signOut(); // تسجيل الخروج من Firebase
-    box.remove('userData'); // حذف بيانات المستخدم من التخزين المحلي
+    await _authService.signOut();
+    box.remove('userData');
 
-    Get.offAllNamed(Routes.signin); // الانتقال إلى شاشة تسجيل الدخول
+    Get.offAllNamed(Routes.signin);
   }
 }

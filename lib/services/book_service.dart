@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:book_reviewer/models/comment_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -29,33 +28,28 @@ class BookService {
 
   Future<void> addBook(BookModel book, File imageFile) async {
     try {
-      // احصل على معرف المستخدم الحالي
       User? user = _auth.currentUser;
 
       var uuid = const Uuid();
-      String bookId = uuid.v4(); // توليد معرّف فريد للكتاب
+      String bookId = uuid.v4();
 
       if (user != null) {
-        // رفع الصورة إلى Firebase Storage
         String? imageUrl = await uploadImage(imageFile, bookId);
 
         if (imageUrl != null) {
-          // نسخ الموديل مع إضافة timestamp واستخدام الرابط المرفوع للصورة
           BookModel newBook = BookModel(
               id: bookId,
               title: book.title,
               author: book.author,
               description: book.description,
-              coverImageUrl: imageUrl, // حفظ الرابط هنا
+              coverImageUrl: imageUrl,
               userId: user.uid,
-              rating:
-                  Random().nextDouble() * (5.0 - 2.0) + 2.0, // إضافة التقييم
-              comments: book.comments, // إضافة التعليقات (إن وجدت)
+              rating: Random().nextDouble() * (5.0 - 2.0) + 2.0,
+              comments: book.comments,
               createdAt: DateTime.now(),
               publisherName: book.publisherName,
               publisherImageUrl: book.publisherImageUrl);
 
-          // إضافة بيانات الكتاب إلى مجموعة "books" في Firestore
           await _firestore
               .collection('books')
               .doc(bookId)
@@ -73,10 +67,8 @@ class BookService {
     }
   }
 
-  // حذف الكتاب من Firebase
   Future<void> deleteBook(String bookId) async {
     try {
-      // حذف الكتاب من مجموعة "books"
       await _firestore.collection('books').doc(bookId).delete();
       print("تم حذف الكتاب بنجاح");
     } catch (e) {
@@ -84,7 +76,6 @@ class BookService {
     }
   }
 
-  // تعديل الكتاب في Firebase
   Future<void> editBook(BookModel updatedBook, File imageFile) async {
     try {
       String? imageUrl = await uploadImage(imageFile, updatedBook.id);
@@ -94,15 +85,14 @@ class BookService {
           title: updatedBook.title,
           author: updatedBook.author,
           description: updatedBook.description,
-          coverImageUrl:
-              imageUrl ?? updatedBook.coverImageUrl, // حفظ الرابط هنا
+          coverImageUrl: imageUrl ?? updatedBook.coverImageUrl,
           userId: updatedBook.userId,
-          rating: updatedBook.rating, // إضافة التقييم
-          comments: updatedBook.comments, // إضافة التعليقات (إن وجدت)
+          rating: updatedBook.rating,
+          comments: updatedBook.comments,
           createdAt: updatedBook.createdAt,
           publisherName: updatedBook.publisherName,
           publisherImageUrl: updatedBook.publisherImageUrl);
-      // تحديث الكتاب في مجموعة "books"
+
       await _firestore
           .collection('books')
           .doc(updatedBook.id)
@@ -117,8 +107,7 @@ class BookService {
     try {
       Query query = _firestore
           .collection('books')
-          .orderBy('createdAt',
-              descending: true) // ترتيب حسب التاريخ من الأحدث إلى الأقدم
+          .orderBy('createdAt', descending: true)
           .limit(limit);
 
       QuerySnapshot querySnapshot = await query.get();
@@ -134,9 +123,7 @@ class BookService {
 
   Future<List<BookModel>> fetchBooks({int limit = 8}) async {
     try {
-      Query query = _firestore
-          .collection('books')
-          .limit(limit); // فقط تحديد العدد دون ترتيب حسب التاريخ
+      Query query = _firestore.collection('books').limit(limit);
 
       if (lastDocument != null) {
         query = query.startAfterDocument(lastDocument!);
@@ -161,8 +148,7 @@ class BookService {
     try {
       Query query = _firestore
           .collection('books')
-          .orderBy('rating',
-              descending: true) // 🔹 ترتيب الكتب من الأعلى تقييمًا إلى الأقل
+          .orderBy('rating', descending: true)
           .limit(limit);
 
       QuerySnapshot querySnapshot = await query.get();
@@ -178,7 +164,6 @@ class BookService {
     }
   }
 
-  // جلب كتب مستخدم معين
   Future<List<BookModel>> fetchUserBooks(String userId) async {
     try {
       QuerySnapshot querySnapshot = await _firestore
@@ -203,7 +188,6 @@ class BookService {
           await _firestore.collection('books').doc(bookId).get();
 
       if (docSnapshot.exists) {
-        // إرجاع الكتاب باستخدام الـ ID
         return BookModel.fromJson(docSnapshot.data() as Map<String, dynamic>);
       } else {
         print("❌ الكتاب غير موجود!");
@@ -214,6 +198,4 @@ class BookService {
       return null;
     }
   }
-
-  // إضافة تعليق إلى الكتاب
 }

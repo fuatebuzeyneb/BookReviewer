@@ -27,17 +27,15 @@ class AllBooksView extends StatelessWidget {
         ),
       ),
       body: Obx(() => ListView.builder(
-            controller: controller.scrollController, // ربط الـ ScrollController
-            itemCount: controller.books.length + 1, // إضافة عنصر اللودينغ
+            controller: controller.scrollController,
+            itemCount: controller.books.length + 1,
             itemBuilder: (context, index) {
               if (index < controller.books.length) {
                 return bookCardWidget(books: controller.books, index: index);
               } else {
                 return controller.isLoading.value
-                    ? const Center(
-                        child:
-                            CircularProgressIndicator()) // عرض اللودينغ عند تحميل المزيد
-                    : const SizedBox(); // لا شيء عند انتهاء البيانات
+                    ? const Center(child: CircularProgressIndicator())
+                    : const SizedBox();
               }
             },
           )),

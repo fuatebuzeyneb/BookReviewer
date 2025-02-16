@@ -15,7 +15,6 @@ class CommentModel {
     required this.ratingValue,
   });
 
-  // تحويل بيانات التعليق إلى صيغة JSON لتخزينه في Firestore
   Map<String, dynamic> toJson() {
     return {
       'userId': userId,
@@ -27,7 +26,6 @@ class CommentModel {
     };
   }
 
-  // إنشاء موديل من بيانات Firestore
   factory CommentModel.fromJson(Map<String, dynamic> json) {
     return CommentModel(
       userId: json['userId'],

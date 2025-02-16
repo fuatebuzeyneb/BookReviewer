@@ -12,10 +12,10 @@ class BookController extends GetxController {
   RxBool isLoading = false.obs;
   final ScrollController scrollController = ScrollController();
 
-  RxList<BookModel> books = <BookModel>[].obs; // قائمة الكتب العامة
+  RxList<BookModel> books = <BookModel>[].obs;
   RxList<BookModel> laterBooks = <BookModel>[].obs;
-  RxList<BookModel> ratingBooks = <BookModel>[].obs; // قائمة الكتب العامة
-  RxList<BookModel> userBooks = <BookModel>[].obs; // قائمة كتب المستخدم
+  RxList<BookModel> ratingBooks = <BookModel>[].obs;
+  RxList<BookModel> userBooks = <BookModel>[].obs;
   var selectedBook;
 
   @override
@@ -30,18 +30,17 @@ class BookController extends GetxController {
   void onScroll() async {
     if (scrollController.position.pixels >=
         scrollController.position.maxScrollExtent - 100) {
-      if (isLoading.value) return; // تجنب تكرار التحميل
+      if (isLoading.value) return;
 
       isLoading.value = true;
 
-      List<BookModel> newBooks =
-          await _bookService.fetchBooks(); // انتظار جلب البيانات
+      List<BookModel> newBooks = await _bookService.fetchBooks();
 
       if (newBooks.isNotEmpty) {
-        books.addAll(newBooks); // تحديث القائمة عند جلب بيانات جديدة
+        books.addAll(newBooks);
       }
 
-      isLoading.value = false; // إيقاف اللودينغ بعد انتهاء التحميل
+      isLoading.value = false;
     }
   }
 
@@ -53,13 +52,11 @@ class BookController extends GetxController {
     ratingBooks.value = await _bookService.fetchTopRatedBooks();
   }
 
-  // تحميل كتب مستخدم معين
   Future<void> loadUserBooks(String userId) async {
     try {
       isLoading.value = true;
       userBooks.value = await _bookService.fetchUserBooks(userId);
     } catch (e) {
-      // التعامل مع الخطأ هنا
       Get.snackbar('error', 'Failed to load user books: $e');
     } finally {
       isLoading.value = false;
@@ -72,12 +69,12 @@ class BookController extends GetxController {
 
     if (selectedBook != null) {
       isLoading.value = false;
-      // قم بتحديث الواجهة هنا (مثل تخزين الكتاب في متغير)
+
       print("تم جلب الكتاب بنجاح: ${selectedBook!.title}");
     } else {
       print(bookId);
       isLoading.value = false;
-      // التعامل مع الحالة عندما لا يتم العثور على الكتاب
+
       print("❌ لم يتم العثور على الكتاب!");
     }
   }
@@ -86,7 +83,6 @@ class BookController extends GetxController {
     laterBooks.value = await _bookService.fetchLatestBooks();
   }
 
-  // إضافة كتاب جديد
   Future<void> addBook(
       {required String title,
       required String author,
@@ -102,9 +98,9 @@ class BookController extends GetxController {
           author: author,
           description: description,
           coverImageUrl: coverImageUrl,
-          userId: '', // سيتم تعبئة هذا الحقل في BookService
-          rating: 5.0, // تقييم افتراضي
-          comments: [], // قائمة تعليقات فارغة
+          userId: '',
+          rating: 5.0,
+          comments: [],
           createdAt: DateTime.now(),
           publisherName: publisherName,
           publisherImageUrl: publisherImageUrl);
@@ -126,7 +122,6 @@ class BookController extends GetxController {
     try {
       isLoading.value = true;
 
-      // استخدام BookService لحذف الكتاب
       await _bookService.deleteBook(bookId);
       await loadRatingBooks();
       await getLatestBooks();
@@ -146,7 +141,6 @@ class BookController extends GetxController {
     try {
       isLoading.value = true;
 
-      // إرسال التعديل إلى BookService
       await _bookService.editBook(
           updatedBook, pickedImage.value ?? File(updatedBook.coverImageUrl));
 
@@ -162,6 +156,4 @@ class BookController extends GetxController {
       print(e);
     }
   }
-
-  // إضافة تعليق
 }
