@@ -38,6 +38,7 @@ class AddBookView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         centerTitle: true,
         surfaceTintColor: Colors.white,
         backgroundColor: Colors.white,

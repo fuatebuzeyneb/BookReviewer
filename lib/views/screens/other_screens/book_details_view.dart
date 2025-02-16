@@ -29,7 +29,8 @@ class BookDetailsView extends StatelessWidget {
     return Obx(() => ModalProgressHUD(
           inAsyncCall: commentController.isLoading.value ||
               bookController.isLoading.value ||
-              authController.isLoading.value,
+              authController.isLoading.value ||
+              bookController.selectedBook == null,
           progressIndicator: const LoadingWidget(),
           child: Scaffold(
             resizeToAvoidBottomInset: true,
@@ -294,7 +295,7 @@ class BookDetailsView extends StatelessWidget {
                                                   ),
                                                   TextWidget(
                                                     text:
-                                                        '${bookController.selectedBook!.comments[index].userId == authController.userModel.value!.uid ? 'You' : bookController.selectedBook!.comments[index].userName} Publish Date: ${DateFormat('dd.MM.yyyy').format(bookController.selectedBook!.comments[index].createdAt)}',
+                                                        'Publish Date: ${DateFormat('dd.MM.yyyy').format(bookController.selectedBook!.comments[index].createdAt)}',
                                                     fontSize: 10,
                                                   ),
                                                 ]),

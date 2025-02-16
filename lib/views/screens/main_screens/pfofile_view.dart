@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/get_core.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_navigation/get_navigation.dart';
-import 'package:intl/intl.dart';
 
 class ProfileView extends StatelessWidget {
   final AuthController _authController = Get.find<AuthController>();
@@ -17,10 +16,10 @@ class ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("UserModel after loading: ${_authController.userModel.value!.email}");
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         centerTitle: true,
         surfaceTintColor: Colors.white,
         backgroundColor: Colors.white,

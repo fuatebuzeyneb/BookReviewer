@@ -16,7 +16,7 @@ class BookController extends GetxController {
   RxList<BookModel> laterBooks = <BookModel>[].obs;
   RxList<BookModel> ratingBooks = <BookModel>[].obs;
   RxList<BookModel> userBooks = <BookModel>[].obs;
-  var selectedBook;
+  BookModel? selectedBook;
 
   @override
   void onInit() {

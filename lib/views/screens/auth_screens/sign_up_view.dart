@@ -110,13 +110,23 @@ class SignupView extends StatelessWidget {
                             fontSize: 20,
                             colorText: Colors.white,
                             onTap: () {
-                              authController.signUp(
-                                email: emailController.text.trim(),
-                                password: passwordController.text.trim(),
-                                fullName: fullNameController.text.trim(),
-                                imageFile: authController.pickedImage.value!
-                                    .toString(),
-                              );
+                              if (authController.pickedImage.value == null ||
+                                  emailController.text.isEmpty ||
+                                  fullNameController.text.isEmpty ||
+                                  passwordController.text.isEmpty) {
+                                Get.snackbar(
+                                  'Error',
+                                  'Please fill all the fields',
+                                );
+                              } else {
+                                authController.signUp(
+                                  email: emailController.text.trim(),
+                                  password: passwordController.text.trim(),
+                                  fullName: fullNameController.text.trim(),
+                                  imageFile: authController.pickedImage.value!
+                                      .toString(),
+                                );
+                              }
                             },
                           ),
                           SizedBox(height: context.height * 0.02),

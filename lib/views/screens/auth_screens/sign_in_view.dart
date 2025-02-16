@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:book_reviewer/routes/routes.dart';
 import 'package:book_reviewer/themes/app_colors.dart';
 import 'package:book_reviewer/views/widgets/loading_widget.dart';
@@ -98,8 +100,15 @@ class SigninView extends StatelessWidget {
                             fontSize: 20,
                             colorText: Colors.white,
                             onTap: () {
-                              authController.signIn(emailController.text.trim(),
-                                  passwordController.text.trim());
+                              if (emailController.text.isEmpty ||
+                                  passwordController.text.isEmpty) {
+                                Get.snackbar(
+                                    'Error', 'Please fill in all fields.');
+                              } else {
+                                authController.signIn(
+                                    emailController.text.trim(),
+                                    passwordController.text.trim());
+                              }
                             },
                           ),
                           SizedBox(height: context.height * 0.02),
