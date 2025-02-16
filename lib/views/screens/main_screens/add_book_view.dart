@@ -90,21 +90,28 @@ class AddBookView extends StatelessWidget {
                     ButtonWidget(
                       onTap: () {
                         if (itIsEdit == false) {
-                          bookController.addBook(
-                            title: bookNameController.text,
-                            author: authorNameController.text,
-                            description: descriptionController.text,
-                            publisherName: Get.find<AuthController>()
-                                .userModel
-                                .value!
-                                .fullName!,
-                            publisherImageUrl: Get.find<AuthController>()
-                                .userModel
-                                .value!
-                                .profilePicture!,
-                            coverImageUrl:
-                                bookController.pickedImage.value.toString(),
-                          );
+                          if (bookNameController.text.isEmpty ||
+                              authorNameController.text.isEmpty ||
+                              descriptionController.text.isEmpty ||
+                              bookController.pickedImage.value == null) {
+                            Get.snackbar('Error', 'Please fill all the fields');
+                          } else {
+                            bookController.addBook(
+                              title: bookNameController.text,
+                              author: authorNameController.text,
+                              description: descriptionController.text,
+                              publisherName: Get.find<AuthController>()
+                                  .userModel
+                                  .value!
+                                  .fullName!,
+                              publisherImageUrl: Get.find<AuthController>()
+                                  .userModel
+                                  .value!
+                                  .profilePicture!,
+                              coverImageUrl:
+                                  bookController.pickedImage.value.toString(),
+                            );
+                          }
                         } else {
                           bookController.editBook(
                               updatedBook: BookModel(
