@@ -42,4 +42,3 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 /lib/firebase_options.dart
-git rm --cached lib/firebase_options.dart 
