@@ -33,51 +33,60 @@ class HomeView extends StatelessWidget {
         ),
       ),
       backgroundColor: Colors.grey[100],
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Row(
-              children: [
-                TextWidget(
-                  text: 'Top Rating books',
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: TopRatingBooksWidget(
-                books: bookController.ratingBooks,
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/background3.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Row(
+                children: [
+                  TextWidget(
+                    text: 'Top Rating books',
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const TextWidget(
-                  text: 'Latest Books',
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+              const SizedBox(height: 4),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: TopRatingBooksWidget(
+                  books: bookController.ratingBooks,
                 ),
-                GestureDetector(
-                  onTap: () async {
-                    Get.toNamed(Routes.allBooksView);
-                  },
-                  child: const TextWidget(
-                    text: 'See All',
-                    fontSize: 14,
+              ),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const TextWidget(
+                    text: 'Latest Books',
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            latestBooksWidget(books: bookController.laterBooks),
-          ],
+                  GestureDetector(
+                    onTap: () async {
+                      Get.toNamed(Routes.allBooksView);
+                    },
+                    child: const TextWidget(
+                      text: 'See All',
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              latestBooksWidget(books: bookController.laterBooks),
+            ],
+          ),
         ),
       ),
     );
