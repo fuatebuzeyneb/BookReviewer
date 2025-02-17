@@ -1,5 +1,5 @@
 import 'package:book_reviewer/utils/extensions.dart';
-import 'package:book_reviewer/views/widgets/text_widget.dart';
+import 'package:book_reviewer/views/widgets/common/text_widget.dart';
 
 import 'package:flutter/material.dart';
 

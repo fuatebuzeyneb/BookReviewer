@@ -1,6 +1,6 @@
-import 'package:book_reviewer/views/bottom_nav_bar/add_book_view.dart';
-import 'package:book_reviewer/views/bottom_nav_bar/home_view.dart';
-import 'package:book_reviewer/views/bottom_nav_bar/profile_view.dart';
+import 'package:book_reviewer/views/home/add_book_view.dart';
+import 'package:book_reviewer/views/home/home_view.dart';
+import 'package:book_reviewer/views/home/profile_view.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavBar extends StatefulWidget {

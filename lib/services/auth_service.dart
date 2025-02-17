@@ -130,7 +130,9 @@ class AuthService {
             UserModel.fromJson(doc.data() as Map<String, dynamic>);
         saveUserData(userModel);
       }
-    } catch (e) {}
+    } catch (e) {
+      print("Error getting user data from Firestore: $e");
+    }
   }
 
   Future<UserCredential?> signInWithGoogle() async {
