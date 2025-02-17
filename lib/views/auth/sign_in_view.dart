@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:book_reviewer/routes/routes.dart';
-import 'package:book_reviewer/themes/app_colors.dart';
+import 'package:book_reviewer/utils/app_colors.dart';
 import 'package:book_reviewer/views/widgets/loading_widget.dart';
 import 'package:book_reviewer/views/widgets/button_widget.dart';
 import 'package:book_reviewer/views/widgets/text_field_widget.dart';
@@ -9,7 +9,7 @@ import 'package:book_reviewer/views/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import '../../../controllers/auth_controller.dart';
+import '../../controllers/auth_controller.dart';
 
 class SigninView extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();

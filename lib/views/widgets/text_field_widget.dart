@@ -1,4 +1,4 @@
-import 'package:book_reviewer/themes/app_colors.dart';
+import 'package:book_reviewer/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class TextFieldWidget extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:book_reviewer/models/book_model.dart';
-import 'package:book_reviewer/themes/app_colors.dart';
-import 'package:book_reviewer/themes/extensions.dart';
+import 'package:book_reviewer/utils/app_colors.dart';
+import 'package:book_reviewer/utils/extensions.dart';
 import 'package:book_reviewer/views/widgets/book_card_widget.dart';
 import 'package:book_reviewer/views/widgets/button_widget.dart';
 import 'package:book_reviewer/views/widgets/text_widget.dart';

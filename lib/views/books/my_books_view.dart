@@ -1,8 +1,8 @@
 import 'package:book_reviewer/controllers/auth_controller.dart';
 import 'package:book_reviewer/controllers/book_controller.dart';
 import 'package:book_reviewer/routes/routes.dart';
-import 'package:book_reviewer/themes/app_colors.dart';
-import 'package:book_reviewer/views/screens/other_screens/book_details_view.dart';
+import 'package:book_reviewer/utils/app_colors.dart';
+import 'package:book_reviewer/views/books/book_details_view.dart';
 import 'package:book_reviewer/views/widgets/book_card_widget.dart';
 import 'package:book_reviewer/views/widgets/button_widget.dart';
 import 'package:book_reviewer/views/widgets/loading_widget.dart';

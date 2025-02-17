@@ -1,4 +1,4 @@
-import 'package:book_reviewer/themes/extensions.dart';
+import 'package:book_reviewer/utils/extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
