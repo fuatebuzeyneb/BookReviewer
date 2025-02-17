@@ -1,4 +1,4 @@
-# Book Review Application
+# Book Reviewer Application
 
 ## Overview
 This is a **Book Review Application** built with **Flutter** and **Firebase**. The app allows users to sign up, log in, publish books, and leave reviews/comments on books published by other users.
@@ -16,6 +16,11 @@ Here are some screenshots of the app:
   <img src="assets/screenshots/add_new_book.jpg" width="25%" />
   <img src="assets/screenshots/profile_view.jpg" width="25%" />
 </p>
+
+
+## Video
+[Watch Demo Video](https://youtu.be/vt0eW1b6alU?si=llDKOnt-4BzfX-FI)
+
 
 ## Features
 - **User Authentication & Authorization**
