@@ -3,7 +3,7 @@
 ## Overview
 This is a **Book Review Application** built with **Flutter** and **Firebase**. The app allows users to sign up, log in, publish books, and leave reviews/comments on books published by other users.
 
-## Screenshots & Demo
+## Screenshots
 Here are some screenshots of the app:
 
 <p align="center">
