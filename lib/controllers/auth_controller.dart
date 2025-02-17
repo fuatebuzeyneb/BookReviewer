@@ -93,10 +93,17 @@ class AuthController extends GetxController {
   Future<void> signInWithGoogle() async {
     try {
       isLoading.value = true;
+
       UserCredential? userCredential = await _authService.signInWithGoogle();
       if (userCredential != null) {
         loadUserData();
         Get.offNamed(Routes.bottomNav);
+        signUp(
+          email: userCredential.user!.email!,
+          password: userCredential.user!.uid,
+          fullName: userCredential.user!.displayName!,
+          imageFile: userCredential.user!.photoURL!,
+        );
       }
     } finally {
       isLoading.value = false;

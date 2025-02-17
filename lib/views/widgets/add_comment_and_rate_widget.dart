@@ -149,12 +149,13 @@ class _AddCommentAndRateWidgetState extends State<AddCommentAndRateWidget> {
                         comment: CommentModel(
                           commentText: textCommentController.text,
                           userId: authController.userModel.value!.uid,
-                          userName: bookController.selectedBook!.publisherName,
+                          userName: authController.userModel.value!.fullName!,
                           ratingValue: ratingNotifier.value.toDouble(),
                           userImageUrl:
-                              bookController.selectedBook!.publisherImageUrl,
+                              authController.userModel.value!.profilePicture!,
                           createdAt: DateTime.now(),
                         ));
+
                     await bookController
                         .loadBookById(bookController.selectedBook!.id);
                   } else {
@@ -164,10 +165,10 @@ class _AddCommentAndRateWidgetState extends State<AddCommentAndRateWidget> {
                         updatedComment: CommentModel(
                           commentText: textCommentController.text,
                           userId: authController.userModel.value!.uid,
-                          userName: bookController.selectedBook!.publisherName,
+                          userName: authController.userModel.value!.fullName!,
                           ratingValue: ratingNotifier.value.toDouble(),
                           userImageUrl:
-                              bookController.selectedBook!.publisherImageUrl,
+                              authController.userModel.value!.profilePicture!,
                           createdAt: DateTime.now(),
                         ));
                     await bookController

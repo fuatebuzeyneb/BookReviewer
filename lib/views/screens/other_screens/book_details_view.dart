@@ -262,7 +262,7 @@ class BookDetailsView extends StatelessWidget {
                                   ),
                             SizedBox(height: context.height * 0.02),
                             SizedBox(
-                              height: context.height * 0.27,
+                              height: context.height * 0.25,
                               width: context.width * 1,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
@@ -311,7 +311,8 @@ class BookDetailsView extends StatelessWidget {
                                                       TextWidget(
                                                         text: bookController
                                                             .selectedBook!
-                                                            .publisherName,
+                                                            .comments[index]
+                                                            .userName,
                                                         fontSize: 14,
                                                         fontWeight:
                                                             FontWeight.bold,
