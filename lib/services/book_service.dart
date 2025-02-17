@@ -4,6 +4,8 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:get/get.dart';
+import 'package:get/state_manager.dart';
 import '../models/book_model.dart';
 import 'package:uuid/uuid.dart';
 
@@ -54,25 +56,22 @@ class BookService {
               .collection('books')
               .doc(bookId)
               .set(newBook.toJson());
-
-          print("تمت إضافة الكتاب بنجاح");
         } else {
-          print("لم يتم رفع الصورة، الكتاب لن يُضاف.");
+          Get.snackbar('error', 'Failed to upload image');
         }
       } else {
-        print("يجب على المستخدم تسجيل الدخول لإضافة كتاب.");
+        Get.snackbar('error', 'User not authenticated');
       }
     } catch (e) {
-      print("حدث خطأ أثناء إضافة الكتاب: $e");
+      Get.snackbar('error', 'Failed to add book: $e');
     }
   }
 
   Future<void> deleteBook(String bookId) async {
     try {
       await _firestore.collection('books').doc(bookId).delete();
-      print("تم حذف الكتاب بنجاح");
     } catch (e) {
-      throw Exception("حدث خطأ أثناء حذف الكتاب: $e");
+      throw Exception("error deleting book: $e");
     }
   }
 
@@ -97,9 +96,8 @@ class BookService {
           .collection('books')
           .doc(updatedBook.id)
           .update(newBook.toJson());
-      print("تم تعديل الكتاب بنجاح");
     } catch (e) {
-      throw Exception("حدث خطأ أثناء تعديل الكتاب: $e");
+      throw Exception("error editing book: $e");
     }
   }
 
@@ -116,7 +114,7 @@ class BookService {
         return BookModel.fromJson(doc.data() as Map<String, dynamic>);
       }).toList();
     } catch (e) {
-      print("❌ حدث خطأ أثناء جلب أحدث الكتب: $e");
+      print("error fetching latest books: $e");
       return [];
     }
   }
@@ -139,7 +137,7 @@ class BookService {
         return BookModel.fromJson(doc.data() as Map<String, dynamic>);
       }).toList();
     } catch (e) {
-      print("❌ حدث خطأ أثناء جلب الكتب: $e");
+      print("error fetching books: $e");
       return [];
     }
   }
@@ -159,7 +157,7 @@ class BookService {
 
       return books;
     } catch (e) {
-      print("❌ حدث خطأ أثناء جلب الكتب: $e");
+      print("error fetching top rated books: $e");
       return [];
     }
   }
@@ -177,7 +175,7 @@ class BookService {
 
       return books;
     } catch (e) {
-      print("❌ حدث خطأ أثناء جلب كتب المستخدم: $e");
+      print("error fetching user books: $e");
       return [];
     }
   }
@@ -190,11 +188,11 @@ class BookService {
       if (docSnapshot.exists) {
         return BookModel.fromJson(docSnapshot.data() as Map<String, dynamic>);
       } else {
-        print("❌ الكتاب غير موجود!");
+        Get.snackbar('error', 'Book not found');
         return null;
       }
     } catch (e) {
-      print("❌ حدث خطأ أثناء جلب الكتاب: $e");
+      Get.snackbar('error', 'Failed to fetch book: $e');
       return null;
     }
   }

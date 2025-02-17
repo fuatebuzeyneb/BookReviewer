@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/get_core.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/get_navigation/get_navigation.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomeView extends StatelessWidget {
   final BookController bookController = Get.find<BookController>();

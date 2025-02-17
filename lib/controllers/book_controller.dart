@@ -69,13 +69,9 @@ class BookController extends GetxController {
 
     if (selectedBook != null) {
       isLoading.value = false;
-
-      print("تم جلب الكتاب بنجاح: ${selectedBook!.title}");
     } else {
       print(bookId);
       isLoading.value = false;
-
-      print("❌ لم يتم العثور على الكتاب!");
     }
   }
 
