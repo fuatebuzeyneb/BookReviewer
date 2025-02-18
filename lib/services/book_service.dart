@@ -23,7 +23,7 @@ class BookService {
       String downloadUrl = await snapshot.ref.getDownloadURL();
       return downloadUrl;
     } catch (e) {
-      print("Error uploading image: $e");
+      Get.snackbar('error', 'Failed to upload image: $e');
       return null;
     }
   }
@@ -137,7 +137,7 @@ class BookService {
         return BookModel.fromJson(doc.data() as Map<String, dynamic>);
       }).toList();
     } catch (e) {
-      print("error fetching books: $e");
+      Get.snackbar('error', 'Failed to fetch books: $e');
       return [];
     }
   }
@@ -157,7 +157,7 @@ class BookService {
 
       return books;
     } catch (e) {
-      print("error fetching top rated books: $e");
+      Get.snackbar('error', 'Failed to fetch books: $e');
       return [];
     }
   }
@@ -175,7 +175,7 @@ class BookService {
 
       return books;
     } catch (e) {
-      print("error fetching user books: $e");
+      Get.snackbar('error', 'Failed to fetch books: $e');
       return [];
     }
   }

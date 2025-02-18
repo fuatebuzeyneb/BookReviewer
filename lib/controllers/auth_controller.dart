@@ -95,16 +95,13 @@ class AuthController extends GetxController {
       isLoading.value = true;
 
       UserCredential? userCredential = await _authService.signInWithGoogle();
+
       if (userCredential != null) {
         loadUserData();
         Get.offNamed(Routes.bottomNav);
-        signUp(
-          email: userCredential.user!.email!,
-          password: userCredential.user!.uid,
-          fullName: userCredential.user!.displayName!,
-          imageFile: userCredential.user!.photoURL!,
-        );
       }
+    } catch (e) {
+      Get.snackbar("Error", "Failed to sign in with Google: $e");
     } finally {
       isLoading.value = false;
     }

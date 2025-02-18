@@ -65,14 +65,12 @@ class BookController extends GetxController {
 
   Future<void> loadBookById(String bookId) async {
     isLoading.value = true;
-    selectedBook = await _bookService.fetchBookById(bookId);
-
-    if (selectedBook != null) {
-      isLoading.value = false;
-    } else {
-      print(bookId);
-      isLoading.value = false;
+    var book = await _bookService.fetchBookById(bookId);
+    if (book == null) {
+      Get.snackbar('Error', 'Book not found');
     }
+    selectedBook = book;
+    isLoading.value = false;
   }
 
   Future<void> getLatestBooks() async {
@@ -117,17 +115,15 @@ class BookController extends GetxController {
   Future<void> deleteBook(String bookId, String userId) async {
     try {
       isLoading.value = true;
-
       await _bookService.deleteBook(bookId);
       await loadRatingBooks();
       await getLatestBooks();
       await loadUserBooks(userId);
-      Get.snackbar('success', 'Book deleted successfully!');
-
-      isLoading.value = false;
+      Get.snackbar('Success', 'Book deleted successfully!');
     } catch (e) {
+      Get.snackbar('Error', 'Failed to delete book: $e');
+    } finally {
       isLoading.value = false;
-      Get.snackbar('error', 'Failed to delete book: $e');
     }
   }
 
@@ -149,7 +145,6 @@ class BookController extends GetxController {
     } catch (e) {
       isLoading.value = false;
       Get.snackbar('error', 'Failed to edit book: $e');
-      print(e);
     }
   }
 }

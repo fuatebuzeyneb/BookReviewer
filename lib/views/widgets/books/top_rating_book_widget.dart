@@ -1,8 +1,13 @@
+import 'package:book_reviewer/controllers/book_controller.dart';
 import 'package:book_reviewer/models/book_model.dart';
+import 'package:book_reviewer/routes/routes.dart';
 import 'package:book_reviewer/utils/extensions.dart';
 import 'package:book_reviewer/views/widgets/common/button_widget.dart';
 import 'package:book_reviewer/views/widgets/common/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/get_instance.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
@@ -28,14 +33,20 @@ class TopRatingBooksWidget extends StatelessWidget {
               padding: const EdgeInsets.only(right: 8),
               child: Stack(
                 children: [
-                  Container(
-                    height: context.height * 0.24,
-                    width: context.width * 0.32,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                      image: DecorationImage(
-                        image: NetworkImage(books[index].coverImageUrl),
-                        fit: BoxFit.cover,
+                  GestureDetector(
+                    onTap: () {
+                      Get.find<BookController>().loadBookById(books[index].id);
+                      Get.toNamed(Routes.bookDetailsView);
+                    },
+                    child: Container(
+                      height: context.height * 0.24,
+                      width: context.width * 0.32,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        image: DecorationImage(
+                          image: NetworkImage(books[index].coverImageUrl),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),

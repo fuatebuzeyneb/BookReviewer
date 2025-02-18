@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
@@ -58,8 +60,12 @@ class AuthService {
         await getUserDataFromFirebase(userCredential.user!.uid);
       }
       return user;
+    } on FirebaseAuthException catch (e) {
+      Get.snackbar("error signing up", _getFirebaseErrorMessage(e.code));
+      return null;
     } catch (e) {
-      print("Error signing up: $e");
+      Get.snackbar("Unexpected registration error",
+          "An error occurred during registration. Try to reset.");
       return null;
     }
   }
@@ -85,10 +91,13 @@ class AuthService {
         password: password,
       );
       await getUserDataFromFirebase(userCredential.user!.uid);
-
       return userCredential.user;
+    } on FirebaseAuthException catch (e) {
+      Get.snackbar("error signing in", _getFirebaseErrorMessage(e.code));
+      return null;
     } catch (e) {
-      print("Error signing in: $e");
+      Get.snackbar("Unexpected login error",
+          "An error occurred during login. Try to reset.");
       return null;
     }
   }
@@ -152,20 +161,49 @@ class AuthService {
       User? user = userCredential.user;
 
       if (user != null) {
-        UserModel newUser = UserModel(
-          uid: user.uid,
-          fullName: user.displayName ?? '',
-          email: user.email ?? '',
-          profilePicture: user.photoURL ?? '',
-          createdAt: DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()),
-        );
-        await saveUserToFirestore(newUser);
-        await saveUserData(newUser);
+        var userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+        if (!userDoc.exists) {
+          UserModel newUser = UserModel(
+            uid: user.uid,
+            fullName: user.displayName ?? '',
+            email: user.email ?? '',
+            profilePicture: user.photoURL ?? '',
+            createdAt: DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()),
+          );
+          await saveUserToFirestore(newUser);
+        }
+
+        return userCredential;
       }
-      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      throw FirebaseAuthException(
+          message: 'Error signing in with Google: $e', code: e.code);
     } catch (e) {
-      print("Error signing in with Google: $e");
-      return null;
+      throw Exception("Failed to sign in with Google: $e");
+    }
+    return null;
+  }
+
+  String _getFirebaseErrorMessage(String errorCode) {
+    switch (errorCode) {
+      case 'invalid-email':
+        return 'The email address is not valid.';
+      case 'user-disabled':
+        return 'This account has been disabled.';
+      case 'user-not-found':
+        return 'No account found with this email.';
+      case 'wrong-password':
+        return 'Incorrect password.';
+      case 'email-already-in-use':
+        return 'This email is already registered.';
+      case 'weak-password':
+        return 'The password is too weak. Please choose a stronger one.';
+      default:
+        return 'An error occurred. Please try again.';
     }
   }
 }
