@@ -106,13 +106,13 @@ class AuthService {
     await _auth.signOut();
   }
 
-  Future<String?> getIdToken() async {
-    User? user = _auth.currentUser;
-    if (user != null) {
-      return await user.getIdToken();
-    }
-    return null;
-  }
+  // Future<String?> getIdToken() async {
+  //   User? user = _auth.currentUser;
+  //   if (user != null) {
+  //     return await user.getIdToken();
+  //   }
+  //   return null;
+  // }
 
   Future<UserModel?> getUserData(String uid) async {
     final localData = box.read('userData');

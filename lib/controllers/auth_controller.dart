@@ -83,7 +83,7 @@ class AuthController extends GetxController {
 
   Future<void> signOut() async {
     await _authService.signOut();
-    box.remove('userData');
+    _authService.clearUserData();
 
     await googleSignIn.signOut();
 
