@@ -145,7 +145,7 @@ class ProfileView extends StatelessWidget {
                 onTap: () {
                   Get.toNamed(Routes.myBooksView);
                   Get.find<BookController>()
-                      .loadUserBooks(_authController.userModel.value!.uid);
+                      .getUserBooks(_authController.userModel.value!.uid);
                 },
                 child: Container(
                   padding: const EdgeInsets.all(6),

@@ -21,9 +21,9 @@ class BookController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    loadRatingBooks();
+    getRatingBooks();
     getLatestBooks();
-    loadBooks();
+    getBooks();
     scrollController.addListener(onScroll);
   }
 
@@ -44,15 +44,15 @@ class BookController extends GetxController {
     }
   }
 
-  Future<void> loadBooks() async {
+  Future<void> getBooks() async {
     books.value = await _bookService.fetchBooks();
   }
 
-  Future<void> loadRatingBooks() async {
+  Future<void> getRatingBooks() async {
     ratingBooks.value = await _bookService.fetchTopRatedBooks();
   }
 
-  Future<void> loadUserBooks(String userId) async {
+  Future<void> getUserBooks(String userId) async {
     try {
       isLoading.value = true;
       userBooks.value = await _bookService.fetchUserBooks(userId);
@@ -100,9 +100,9 @@ class BookController extends GetxController {
           publisherImageUrl: publisherImageUrl);
 
       await _bookService.addBook(book, pickedImage.value!);
-      await loadRatingBooks();
+      await getRatingBooks();
       await getLatestBooks();
-      await loadUserBooks(book.userId);
+      await getUserBooks(book.userId);
       Get.snackbar('success', 'Book added successfully!');
 
       isLoading.value = false;
@@ -116,9 +116,9 @@ class BookController extends GetxController {
     try {
       isLoading.value = true;
       await _bookService.deleteBook(bookId);
-      await loadRatingBooks();
+      await getRatingBooks();
       await getLatestBooks();
-      await loadUserBooks(userId);
+      await getUserBooks(userId);
       Get.snackbar('Success', 'Book deleted successfully!');
     } catch (e) {
       Get.snackbar('Error', 'Failed to delete book: $e');
@@ -136,9 +136,9 @@ class BookController extends GetxController {
       await _bookService.editBook(
           updatedBook, pickedImage.value ?? File(updatedBook.coverImageUrl));
 
-      await loadRatingBooks();
+      await getRatingBooks();
       await getLatestBooks();
-      await loadUserBooks(updatedBook.userId);
+      await getUserBooks(updatedBook.userId);
       Get.snackbar('success', 'Book edited successfully!');
 
       isLoading.value = false;
