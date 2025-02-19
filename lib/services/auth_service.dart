@@ -61,7 +61,7 @@ class AuthService {
       }
       return user;
     } on FirebaseAuthException catch (e) {
-      Get.snackbar("error signing up", _getFirebaseErrorMessage(e.code));
+      //   Get.snackbar("error signing up", _getFirebaseErrorMessage(e.code));
       return null;
     } catch (e) {
       Get.snackbar("Unexpected registration error",
@@ -161,31 +161,21 @@ class AuthService {
       User? user = userCredential.user;
 
       if (user != null) {
-        var userDoc = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .get();
-
-        if (!userDoc.exists) {
-          UserModel newUser = UserModel(
-            uid: user.uid,
-            fullName: user.displayName ?? '',
-            email: user.email ?? '',
-            profilePicture: user.photoURL ?? '',
-            createdAt: DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()),
-          );
-          await saveUserToFirestore(newUser);
-        }
-
-        return userCredential;
+        UserModel newUser = UserModel(
+          uid: user.uid,
+          fullName: user.displayName ?? '',
+          email: user.email ?? '',
+          profilePicture: user.photoURL ?? '',
+          createdAt: DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()),
+        );
+        await saveUserToFirestore(newUser);
+        await saveUserData(newUser);
       }
-    } on FirebaseAuthException catch (e) {
-      throw FirebaseAuthException(
-          message: 'Error signing in with Google: $e', code: e.code);
+      return userCredential;
     } catch (e) {
-      throw Exception("Failed to sign in with Google: $e");
+      print("Error signing in with Google: $e");
+      return null;
     }
-    return null;
   }
 
   String _getFirebaseErrorMessage(String errorCode) {
