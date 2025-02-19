@@ -1,6 +1,6 @@
 import 'package:book_reviewer/controllers/book_controller.dart';
 import 'package:book_reviewer/views/widgets/books/book_card_widget.dart';
-import 'package:book_reviewer/views/widgets/common/text_widget.dart';
+import 'package:book_reviewer/views/widgets/shared/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

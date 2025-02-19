@@ -16,9 +16,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  Get.put(AuthController());
-  Get.put(BookController());
-  Get.put(CommentController());
 
   runApp(const MyApp());
 }
@@ -30,6 +27,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
+      initialBinding: BindingsBuilder(() {
+        Get.put(AuthController());
+        Get.put(BookController());
+        Get.put(CommentController());
+      }),
       initialRoute: Routes.splash,
       getPages: AppPages.pages,
     );

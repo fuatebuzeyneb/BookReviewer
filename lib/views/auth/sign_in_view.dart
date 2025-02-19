@@ -2,10 +2,10 @@ import 'dart:math';
 
 import 'package:book_reviewer/routes/routes.dart';
 import 'package:book_reviewer/utils/app_colors.dart';
-import 'package:book_reviewer/views/widgets/common/loading_widget.dart';
-import 'package:book_reviewer/views/widgets/common/button_widget.dart';
-import 'package:book_reviewer/views/widgets/common/text_field_widget.dart';
-import 'package:book_reviewer/views/widgets/common/text_widget.dart';
+import 'package:book_reviewer/views/widgets/shared/loading_widget.dart';
+import 'package:book_reviewer/views/widgets/shared/button_widget.dart';
+import 'package:book_reviewer/views/widgets/shared/text_field_widget.dart';
+import 'package:book_reviewer/views/widgets/shared/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
