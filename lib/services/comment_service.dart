@@ -16,37 +16,6 @@ class CommentService {
     }
   }
 
-  // static Future<CommentModel?> getUserComment(
-  //     String bookId, String userId) async {
-  //   try {
-  //     final bookSnapshot = await FirebaseFirestore.instance
-  //         .collection('books')
-  //         .doc(bookId)
-  //         .get();
-
-  //     if (!bookSnapshot.exists ||
-  //         !bookSnapshot.data()!.containsKey('comments')) {
-  //       print("No comments found for book $bookId");
-  //       return null;
-  //     }
-
-  //     final commentsData = bookSnapshot.data()!['comments'] as List<dynamic>;
-
-  //     final userComment = commentsData
-  //         .where((commentData) =>
-  //             CommentModel.fromJson(commentData).userId == userId)
-  //         .map((commentData) => CommentModel.fromJson(commentData))
-  //         .firstWhere(
-  //           (comment) => comment.userId == userId,
-  //         );
-
-  //     return userComment;
-  //   } catch (e) {
-  //     print("Error fetching user comment: $e");
-  //     return null;
-  //   }
-  // }
-
   static Future<void> editCommentInFirebase(
       String bookId, int index, CommentModel updatedComment) async {
     try {
